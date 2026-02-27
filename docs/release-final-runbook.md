@@ -43,3 +43,7 @@ Fluxo recomendado para promover uma RC validada para release final.
 
 - RC aprovada e release final devem apontar para o mesmo SHA.
 - Qualquer falha no gate bloqueia publicacao.
+
+## Validacao operacional
+
+- Fluxo RC -> release final validado em 2026-02-27 via GitHub Actions.
