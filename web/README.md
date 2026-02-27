@@ -34,7 +34,8 @@ Scaffold inicial do frontend (Next.js 14) para consumir a API implementada na Wa
 
 1. `npm run lint`
 2. `npm run typecheck`
-3. `npm test`
+3. `npm run test:unit`
+4. `npm test`
 
 Observacoes:
 
@@ -44,4 +45,5 @@ Observacoes:
 ### Comandos uteis
 
 - UI runner: `npm run test:ui`
+- Unit tests: `npm run test:unit`
 - Rodar um arquivo: `npx playwright test tests/e2e/smoke.spec.ts`

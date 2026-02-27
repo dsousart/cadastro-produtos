@@ -68,7 +68,7 @@ test("tabs: preserva contexto de filtros ao voltar para produtos", async ({ page
   await expect(page.getByLabel("Busca (SKU / nome / marca)")).toHaveValue("camisa");
   await expect(page.getByLabel("Status")).toHaveValue("approved");
 
-  await page.getByRole("tab", { name: "Jobs" }).click();
+  await page.locator('a[href="/jobs"]').click();
   await expect(page).toHaveURL(/\/jobs$/);
 
   const produtosTab = page.getByRole("tab", { name: "Produtos" });

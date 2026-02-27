@@ -22,6 +22,7 @@ pytest-cache-files-*/
 __pycache__/
 *.pyc
 web/test-results/
+web/playwright-report/
 *.tsbuildinfo
 
 # Large generated/local data

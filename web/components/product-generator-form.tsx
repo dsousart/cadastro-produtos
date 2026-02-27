@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { FormEvent, useMemo, useState } from "react";
 import { JsonViewer } from "./json-viewer";
 import { ApiClientError, postJson } from "../lib/api-client";

@@ -9,7 +9,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "playwright test",
-    "test:ui": "playwright test --ui"
+    "test:ui": "playwright test --ui",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "next": "14.2.15",
@@ -18,11 +19,16 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "22.13.5",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.15",
-    "typescript": "5.7.3"
+    "jsdom": "^22.1.0",
+    "typescript": "5.7.3",
+    "vitest": "^4.0.18"
   }
 }

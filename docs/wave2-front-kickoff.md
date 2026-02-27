@@ -42,6 +42,8 @@
 - smoke E2E expandido para caminhos de falha de polling em `Jobs` (erro 500 e rede)
 - fluxo E2E ponta a ponta `Gerar -> Jobs -> Produtos (focus)` coberto em smoke
 - CI de frontend (`.github/workflows/web-ci.yml`) com `lint`, `typecheck` e smoke E2E
+- camada inicial de testes de componentes (Vitest + Testing Library)
+- CI de frontend expandida com `test:unit` antes do smoke E2E
 - CI de frontend com upload de artifacts Playwright em falha (`playwright-report`, `test-results`)
 - configuracao inicial de env (`web/.env.example`)
 - `README` de bootstrap local
