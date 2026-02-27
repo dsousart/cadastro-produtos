@@ -4,20 +4,25 @@ Indice rapido dos artefatos principais de arquitetura, roadmap e execucao.
 
 ## Status de CI
 
-Substitua `<owner>` e `<repo>` pelos valores do repositorio no GitHub:
-
 - API CI badge:
-  - `https://github.com/<owner>/<repo>/actions/workflows/api-ci.yml`
-  - `https://github.com/<owner>/<repo>/actions/workflows/api-ci.yml/badge.svg`
+  - `https://github.com/dsousart/cadastro-produtos/actions/workflows/api-ci.yml`
+  - `https://github.com/dsousart/cadastro-produtos/actions/workflows/api-ci.yml/badge.svg`
 - Web CI badge:
-  - `https://github.com/<owner>/<repo>/actions/workflows/web-ci.yml`
-  - `https://github.com/<owner>/<repo>/actions/workflows/web-ci.yml/badge.svg`
+  - `https://github.com/dsousart/cadastro-produtos/actions/workflows/web-ci.yml`
+  - `https://github.com/dsousart/cadastro-produtos/actions/workflows/web-ci.yml/badge.svg`
 
 Exemplo markdown:
 
 ```md
 [![API CI](https://github.com/<owner>/<repo>/actions/workflows/api-ci.yml/badge.svg)](https://github.com/<owner>/<repo>/actions/workflows/api-ci.yml)
 [![Web CI](https://github.com/<owner>/<repo>/actions/workflows/web-ci.yml/badge.svg)](https://github.com/<owner>/<repo>/actions/workflows/web-ci.yml)
+```
+
+No projeto atual:
+
+```md
+[![API CI](https://github.com/dsousart/cadastro-produtos/actions/workflows/api-ci.yml/badge.svg)](https://github.com/dsousart/cadastro-produtos/actions/workflows/api-ci.yml)
+[![Web CI](https://github.com/dsousart/cadastro-produtos/actions/workflows/web-ci.yml/badge.svg)](https://github.com/dsousart/cadastro-produtos/actions/workflows/web-ci.yml)
 ```
 
 ## Documentos principais
