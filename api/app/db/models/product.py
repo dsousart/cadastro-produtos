@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any, Optional
 
-from sqlalchemy import Enum, ForeignKey, Integer, JSON, String
+from sqlalchemy import DateTime, Enum, ForeignKey, Integer, JSON, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from ..base import Base
@@ -33,5 +34,7 @@ class Product(Base, IdMixin, TimestampMixin):
         index=True,
     )
     score_qualidade: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    status_updated_by: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
+    status_updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     input_payload: Mapped[dict[str, Any]] = mapped_column(JSON)
     output_payload: Mapped[Optional[dict[str, Any]]] = mapped_column(JSON, nullable=True)

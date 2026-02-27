@@ -21,6 +21,11 @@ Elevar a usabilidade do workspace operacional para reduzir friccao no uso diario
 - [x] Garantir fallback de navegacao `Gerar -> Produtos` por `SKU` quando `product_id` nao vier na resposta
 - [x] Implementar acoes editoriais no detalhe do produto (`Aprovar`, `Reprovar`, `Marcar em revisao`)
 - [x] Conectar acoes editoriais ao backend via `PATCH /api/v1/products/{id}`
+- [x] Exibir status editorial em linguagem de negocio (ex.: `Em revisao`, `Aprovado`, `Reprovado`)
+- [x] Adicionar confirmacao explicita antes de acao de `Reprovar`
+- [x] Incluir captura de operador (`changed_by`) para trilha minima de auditoria
+- [x] Exibir trilha minima no detalhe (`status_updated_by`, `status_updated_at`)
+- [x] Cobrir cenarios de erro do PATCH editorial (`404`, `503`) no smoke E2E
 - [x] Melhorar estados vazios com CTA claro para proximo passo
 - [x] Revisar hierarquia visual das acoes principais vs secundarias
 - [x] Validar consistencia de feedback (loading, erro, sucesso)
@@ -58,6 +63,7 @@ AND a navegacao entre abas deve manter contexto operacional
 - `api/app/schemas/__init__.py`
 - `api/app/db/models/product.py`
 - `api/alembic/versions/0002_wave4_editorial_status.py`
+- `api/alembic/versions/0003_wave4_status_audit_fields.py`
 - `api/tests/test_api_integration.py`
 - `docs/stories/2026-02-27-wave4-web-ux-user-first-review.md`
 
@@ -73,11 +79,13 @@ AND a navegacao entre abas deve manter contexto operacional
 
 - `npm run lint` (web) OK
 - `npm run typecheck` (web) OK
-- `npm test` (web) OK (18/18)
+- `npm test` (web) OK (20/20)
 - `python -m pytest -q api/tests/test_api_integration.py` OK (3 passed, 1 skipped)
 - Validacao manual local confirmada nas jornadas:
   - `Gerar -> Produtos` (persistencia e listagem)
   - `Gerar -> Produtos` com fallback por `SKU` quando API nao retorna `product_id`
   - `Produtos` com revisao editorial por acoes de status no detalhe
+  - `Produtos` com trilha minima de auditoria (quem/quando mudou status)
+  - `Produtos` com erro de PATCH tratado para `404` e `503`
   - `Jobs -> Produtos` (redirecionamento com foco)
   - `Produtos` com tratamento claro de erro `503` (CTA para Health)

@@ -93,12 +93,16 @@ def update_product_status(
     *,
     product_id: str,
     status: Literal["in_review", "approved", "rejected"],
+    changed_by: Optional[str] = None,
 ) -> Optional[Product]:
     record = get_product_by_id(db, product_id)
     if record is None:
         return None
     record.status = status
-    record.updated_at = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc)
+    record.status_updated_at = now
+    record.status_updated_by = changed_by.strip() if changed_by else None
+    record.updated_at = now
     db.add(record)
     db.flush()
     db.refresh(record)

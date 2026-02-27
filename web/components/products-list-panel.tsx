@@ -33,6 +33,8 @@ type ProductDetail = {
   marca: string;
   status: ProductStatus;
   score_qualidade: number | null;
+  status_updated_by?: string | null;
+  status_updated_at?: string | null;
   tenant_id?: string | null;
   generation_job_id?: string | null;
   input_payload: Record<string, unknown>;
@@ -44,6 +46,8 @@ type ProductDetail = {
 type ProductStatusUpdateResponse = {
   id: string;
   status: ProductStatus;
+  status_updated_by?: string | null;
+  status_updated_at?: string | null;
   updated_at: string;
 };
 
@@ -71,6 +75,16 @@ function getStatusBadgeClass(status: ProductStatus) {
   if (normalized === "rejected") return "badge badge-danger";
   if (normalized === "pending" || normalized === "running") return "badge badge-warn";
   return "badge";
+}
+
+function getStatusLabel(status: ProductStatus) {
+  if (status === "in_review") return "Em revisao";
+  if (status === "approved") return "Aprovado";
+  if (status === "rejected") return "Reprovado";
+  if (status === "generated") return "Gerado";
+  if (status === "published") return "Publicado";
+  if (status === "draft") return "Rascunho";
+  return status;
 }
 
 function getScoreBadgeClass(score: number | null) {
@@ -124,6 +138,7 @@ export function ProductsListPanel({
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
   const [statusActionLoading, setStatusActionLoading] = useState<ProductStatus | null>(null);
   const [statusActionFeedback, setStatusActionFeedback] = useState<string | null>(null);
+  const [reviewerName, setReviewerName] = useState("operador-web");
 
   const canPrev = offset > 0;
   const canNext = offset + limit < total;
@@ -144,6 +159,7 @@ export function ProductsListPanel({
         sortBy: "created_at" | "score_qualidade" | "sku" | "nome_produto";
         sortDir: "asc" | "desc";
         limit: number;
+        reviewerName: string;
       }>;
       if (typeof prefs.searchTerm === "string") setSearchTerm(prefs.searchTerm);
       if (typeof prefs.statusFilter === "string") setStatusFilter(prefs.statusFilter);
@@ -159,6 +175,9 @@ export function ProductsListPanel({
       }
       if (typeof prefs.limit === "number" && Number.isFinite(prefs.limit)) {
         setLimit(Math.min(50, Math.max(1, prefs.limit)));
+      }
+      if (typeof prefs.reviewerName === "string" && prefs.reviewerName.trim().length > 0) {
+        setReviewerName(prefs.reviewerName);
       }
     } catch {
       // ignore localStorage parse/access issues
@@ -176,12 +195,13 @@ export function ProductsListPanel({
           sortBy,
           sortDir,
           limit,
+          reviewerName,
         }),
       );
     } catch {
       // ignore localStorage write failures
     }
-  }, [searchTerm, statusFilter, minScore, sortBy, sortDir, limit]);
+  }, [searchTerm, statusFilter, minScore, sortBy, sortDir, limit, reviewerName]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -244,24 +264,42 @@ export function ProductsListPanel({
 
   async function applyEditorialStatus(nextStatus: "in_review" | "approved" | "rejected") {
     if (!selectedProductId) return;
+    if (selectedProduct?.status === nextStatus) {
+      setStatusActionFeedback(`Este produto ja esta com status: ${getStatusLabel(nextStatus)}.`);
+      window.setTimeout(() => setStatusActionFeedback(null), 1500);
+      return;
+    }
+    if (nextStatus === "rejected") {
+      const confirmed = window.confirm(
+        "Confirmar reprovar este produto? Voce pode mudar para outro status depois.",
+      );
+      if (!confirmed) return;
+    }
     setStatusActionLoading(nextStatus);
     setStatusActionFeedback(null);
     try {
-      const result = await patchJson<{ status: "in_review" | "approved" | "rejected" }, ProductStatusUpdateResponse>(
+      const result = await patchJson<
+        { status: "in_review" | "approved" | "rejected"; changed_by?: string },
+        ProductStatusUpdateResponse
+      >(
         `/api/products/${selectedProductId}`,
-        { status: nextStatus },
+        { status: nextStatus, changed_by: reviewerName.trim() || undefined },
       );
       setItems((prev) =>
         prev.map((item) => (item.id === result.id ? { ...item, status: result.status } : item)),
       );
       setSelectedProduct((prev) =>
         prev && prev.id === result.id
-          ? { ...prev, status: result.status, updated_at: result.updated_at }
+          ? {
+              ...prev,
+              status: result.status,
+              status_updated_by: result.status_updated_by ?? null,
+              status_updated_at: result.status_updated_at ?? null,
+              updated_at: result.updated_at,
+            }
           : prev,
       );
-      const label =
-        nextStatus === "approved" ? "Aprovado" : nextStatus === "rejected" ? "Reprovado" : "Em revisao";
-      setStatusActionFeedback(`Status atualizado: ${label}.`);
+      setStatusActionFeedback(`Status atualizado: ${getStatusLabel(nextStatus)}.`);
       window.setTimeout(() => setStatusActionFeedback(null), 1800);
     } catch (err) {
       if (err instanceof ApiClientError) {
@@ -308,9 +346,9 @@ export function ProductsListPanel({
       setMinScore("85");
       setSearchTerm("");
     } else {
-      setStatusFilter("generated");
+      setStatusFilter("in_review");
       setMinScore("");
-      setSearchTerm("camisa");
+      setSearchTerm("");
     }
 
     setShareFeedback(`Preset aplicado: ${preset}.`);
@@ -438,13 +476,21 @@ export function ProductsListPanel({
         </label>
         <label>
           Status
-          <input
+          <select
             value={statusFilter}
             onChange={(e) => {
               setOffset(0);
               setStatusFilter(e.target.value);
             }}
-          />
+          >
+            <option value="">Todos</option>
+            <option value="generated">Gerado</option>
+            <option value="in_review">Em revisao</option>
+            <option value="approved">Aprovado</option>
+            <option value="rejected">Reprovado</option>
+            <option value="published">Publicado</option>
+            <option value="draft">Rascunho</option>
+          </select>
         </label>
         <label>
           Min score
@@ -590,7 +636,7 @@ export function ProductsListPanel({
                   <td>{item.sku}</td>
                   <td>{item.nome_produto}</td>
                   <td>
-                    <span className={getStatusBadgeClass(item.status)}>{item.status}</span>
+                    <span className={getStatusBadgeClass(item.status)}>{getStatusLabel(item.status)}</span>
                   </td>
                   <td>
                     <span className={getScoreBadgeClass(item.score_qualidade)}>
@@ -709,7 +755,7 @@ export function ProductsListPanel({
                 <span>Status</span>
                 <strong>
                   <span className={getStatusBadgeClass(selectedProduct.status)}>
-                    {selectedProduct.status}
+                    {getStatusLabel(selectedProduct.status)}
                   </span>
                 </strong>
               </div>
@@ -723,6 +769,14 @@ export function ProductsListPanel({
               </div>
             </div>
             <div className="form-actions">
+              <label>
+                Operador
+                <input
+                  value={reviewerName}
+                  onChange={(e) => setReviewerName(e.target.value)}
+                  placeholder="Ex.: diego.sousa"
+                />
+              </label>
               <button
                 type="button"
                 onClick={() => void applyEditorialStatus("approved")}
@@ -747,6 +801,20 @@ export function ProductsListPanel({
               <span className="muted-inline">
                 Ultima atualizacao: {new Date(selectedProduct.updated_at).toLocaleString("pt-BR")}
               </span>
+            </div>
+            <div className="detail-summary-grid">
+              <div>
+                <span>Ultima mudanca de status</span>
+                <strong>
+                  {selectedProduct.status_updated_at
+                    ? new Date(selectedProduct.status_updated_at).toLocaleString("pt-BR")
+                    : "-"}
+                </strong>
+              </div>
+              <div>
+                <span>Alterado por</span>
+                <strong>{selectedProduct.status_updated_by || "-"}</strong>
+              </div>
             </div>
           </>
         ) : null}

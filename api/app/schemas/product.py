@@ -217,6 +217,8 @@ class ProductRecordDetail(BaseModel):
     marca: str
     status: ProductStatus
     score_qualidade: Optional[int] = None
+    status_updated_by: Optional[str] = None
+    status_updated_at: Optional[datetime] = None
     input_payload: Dict[str, Any]
     output_payload: Optional[Dict[str, Any]] = None
     created_at: datetime
@@ -225,9 +227,12 @@ class ProductRecordDetail(BaseModel):
 
 class ProductStatusUpdateRequest(BaseModel):
     status: Literal["in_review", "approved", "rejected"]
+    changed_by: Optional[str] = Field(default=None, min_length=1, max_length=120)
 
 
 class ProductStatusUpdateResponse(BaseModel):
     id: str
     status: ProductStatus
+    status_updated_by: Optional[str] = None
+    status_updated_at: Optional[datetime] = None
     updated_at: datetime
