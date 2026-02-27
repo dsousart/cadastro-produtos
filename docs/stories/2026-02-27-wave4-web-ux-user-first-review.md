@@ -57,7 +57,7 @@ AND a navegacao entre abas deve manter contexto operacional
 - `api/app/schemas/product.py`
 - `api/app/schemas/__init__.py`
 - `api/app/db/models/product.py`
-- `api/alembic/versions/0002_wave4_product_editorial_statuses.py`
+- `api/alembic/versions/0002_wave4_editorial_status.py`
 - `api/tests/test_api_integration.py`
 - `docs/stories/2026-02-27-wave4-web-ux-user-first-review.md`
 
