@@ -80,6 +80,55 @@ test("tabs: preserva contexto de filtros ao voltar para produtos", async ({ page
   await expect(page.getByLabel("Status")).toHaveValue("approved");
 });
 
+test("produtos: resetar visao limpa query e retorna defaults", async ({ page }) => {
+  await page.route("**/api/products**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [],
+        pagination: { total: 0, limit: 5, offset: 0 },
+      }),
+    });
+  });
+
+  await page.goto("/produtos?q=camisa&status=approved&min_score=85&sort_by=sku&sort_dir=asc&limit=5&offset=10");
+  await page.getByRole("button", { name: "Resetar visao" }).click();
+
+  await expect(page).toHaveURL(/\/produtos\?status=generated&sort_by=created_at&sort_dir=desc&limit=10&offset=0/);
+  await expect(page.getByLabel("Busca (SKU / nome / marca)")).toHaveValue("");
+  await expect(page.getByLabel("Status")).toHaveValue("generated");
+  await expect(page.getByLabel("Min score")).toHaveValue("");
+  await expect(page.getByLabel("Ordenar por")).toHaveValue("created_at");
+  await expect(page.getByLabel("Direcao")).toHaveValue("desc");
+  await expect(page.getByLabel("Limite")).toHaveValue("10");
+});
+
+test("produtos: copiar link da visao mostra feedback", async ({ page }) => {
+  await page.addInitScript(() => {
+    const writeText = async () => {};
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+  });
+
+  await page.route("**/api/products**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [],
+        pagination: { total: 0, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.goto("/produtos?q=camisa&status=approved");
+  await page.getByRole("button", { name: "Copiar link da visao" }).click();
+  await expect(page.getByText("Link da visao atual copiado.")).toBeVisible();
+});
+
 test("jobs: cria job e completa polling", async ({ page }) => {
   let pollCount = 0;
 
