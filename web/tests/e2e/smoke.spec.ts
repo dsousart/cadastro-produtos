@@ -52,6 +52,34 @@ test("produtos: aplica estado inicial de query params", async ({ page }) => {
   await expect(page.getByLabel("Limite")).toHaveValue("5");
 });
 
+test("tabs: preserva contexto de filtros ao voltar para produtos", async ({ page }) => {
+  await page.route("**/api/products**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [],
+        pagination: { total: 0, limit: 5, offset: 0 },
+      }),
+    });
+  });
+
+  await page.goto("/produtos?q=camisa&status=approved&limit=5");
+  await expect(page.getByLabel("Busca (SKU / nome / marca)")).toHaveValue("camisa");
+  await expect(page.getByLabel("Status")).toHaveValue("approved");
+
+  await page.getByRole("tab", { name: "Jobs" }).click();
+  await expect(page).toHaveURL(/\/jobs$/);
+
+  const produtosTab = page.getByRole("tab", { name: "Produtos" });
+  await expect(produtosTab).toHaveAttribute("href", /q=camisa/);
+  await produtosTab.click();
+
+  await expect(page).toHaveURL(/\/produtos\?/);
+  await expect(page.getByLabel("Busca (SKU / nome / marca)")).toHaveValue("camisa");
+  await expect(page.getByLabel("Status")).toHaveValue("approved");
+});
+
 test("jobs: cria job e completa polling", async ({ page }) => {
   let pollCount = 0;
 

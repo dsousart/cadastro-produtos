@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import { GenerationJobsPanel } from "./generation-jobs-panel";
 import { ProductGeneratorForm } from "./product-generator-form";
@@ -32,6 +33,33 @@ export function Wave2Dashboard({
   initialProductQuery,
 }: Wave2DashboardProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [productsHref, setProductsHref] = useState("/produtos");
+  const searchParamsKey = searchParams.toString();
+
+  useEffect(() => {
+    if (pathname !== "/produtos") return;
+    const nextHref = searchParamsKey ? `/produtos?${searchParamsKey}` : "/produtos";
+    setProductsHref(nextHref);
+    try {
+      window.localStorage.setItem("wave2.products.lastView", nextHref);
+    } catch {
+      // ignore localStorage errors
+    }
+  }, [pathname, searchParamsKey]);
+
+  useEffect(() => {
+    if (pathname === "/produtos") return;
+    try {
+      const savedHref = window.localStorage.getItem("wave2.products.lastView");
+      if (savedHref && savedHref.startsWith("/produtos")) {
+        setProductsHref(savedHref);
+      }
+    } catch {
+      // ignore localStorage errors
+    }
+  }, [pathname]);
 
   useEffect(() => {
     try {
@@ -66,7 +94,7 @@ export function Wave2Dashboard({
               Gerar
             </Link>
             <Link
-              href="/produtos"
+              href={productsHref}
               role="tab"
               aria-selected={activeTab === "produtos"}
               className={activeTab === "produtos" ? "tab-button is-active" : "tab-button"}
