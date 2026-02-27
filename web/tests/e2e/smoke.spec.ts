@@ -157,3 +157,63 @@ test("gerar: exibe erro quando backend esta indisponivel", async ({ page }) => {
   await page.getByRole("button", { name: "Gerar produto" }).click();
   await expect(page.locator(".form-actions .warn")).toHaveText("Failed to fetch");
 });
+
+test("jobs: exibe erro quando polling retorna 500", async ({ page }) => {
+  await page.route("**/api/generation-jobs", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 202,
+      contentType: "application/json",
+      body: JSON.stringify({
+        job_id: "job-smoke-fail-500",
+        status: "pending",
+        total_items: 1,
+        message: "accepted",
+      }),
+    });
+  });
+
+  await page.route("**/api/generation-jobs/job-smoke-fail-500", async (route) => {
+    await route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({
+        message: "Falha ao consultar job",
+      }),
+    });
+  });
+
+  await page.goto("/jobs");
+  await page.getByRole("button", { name: "Criar generation-job" }).first().click();
+  await expect(page.locator(".form-actions .warn")).toHaveText("Falha ao consultar job");
+});
+
+test("jobs: exibe erro quando polling falha por rede", async ({ page }) => {
+  await page.route("**/api/generation-jobs", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 202,
+      contentType: "application/json",
+      body: JSON.stringify({
+        job_id: "job-smoke-fail-network",
+        status: "pending",
+        total_items: 1,
+        message: "accepted",
+      }),
+    });
+  });
+
+  await page.route("**/api/generation-jobs/job-smoke-fail-network", async (route) => {
+    await route.abort("failed");
+  });
+
+  await page.goto("/jobs");
+  await page.getByRole("button", { name: "Criar generation-job" }).first().click();
+  await expect(page.locator(".form-actions .warn")).toHaveText("Failed to fetch");
+});
