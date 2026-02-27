@@ -6,7 +6,7 @@
 **Priority:** Medium
 **Points:** 5
 **Effort:** 4-6 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Validation
 
 ---
@@ -173,6 +173,7 @@ pipeline/bk_validate.py
 | 2026-02-24 | Story setup | Created story | Done |
 | 2026-02-26 | Phase 1-2 | Implemented quality heuristics (errors/warnings) in BK validator and CLI report | Done |
 | 2026-02-26 | Phase 3 | Ran validator on `base_conhecimento` and confirmed noisy files flagged | Done |
+| 2026-02-27 | Validation rerun | Re-executed `python pipeline\\bk_validate.py --base base_conhecimento` and confirmed expected noisy-file signaling | Done |
 
 ### Implementation Notes
 
@@ -232,9 +233,10 @@ Sem bloqueios de implementacao. Houve muitos findings na base atual, o que era e
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-24 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Finalized status to Done with updated validation evidence | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-24
-**Atualizado:** 2026-02-24 (Story created)
+**Atualizado:** 2026-02-27 (Story concluida e revalidada)

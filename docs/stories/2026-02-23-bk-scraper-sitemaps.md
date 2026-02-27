@@ -1,4 +1,4 @@
-# Story 1.7: Add sitemap-based discovery to BK scraper
+﻿# Story 1.7: Add sitemap-based discovery to BK scraper
 
 **Epic:** Base Conhecimento
 **Story ID:** 1.7
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 5
 **Effort:** 4-6 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -69,7 +69,7 @@ AND ainda respeitar robots.txt
 | Attribute | Value | Rationale |
 |-----------|-------|-----------|
 | Type | Feature | Nova forma de descoberta |
-| Complexity | Medium | Parsing + integração |
+| Complexity | Medium | Parsing + integraÃ§Ã£o |
 | Test Requirements | Manual | Sem suite definida |
 | Review Focus | Logic | URLs e filtros |
 
@@ -159,6 +159,7 @@ pipeline/bk_scraper.py
 |-----------|-------|--------|--------|
 | 2026-02-23 | Story setup | Created story | Done |
 | 2026-02-23 | Sitemaps | Implemented sitemap discovery | Done |
+| 2026-02-27 | Validation rerun | Executed scraper with `--use-sitemaps` and generated report successfully (no sitemap URLs returned for test domain at execution time) | Done |
 
 ### Implementation Notes
 
@@ -208,9 +209,11 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-23 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Revalidated sitemap mode execution and report generation | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
-**Atualizado:** 2026-02-23 (Sitemaps implemented)
+**Atualizado:** 2026-02-27 (Sitemap mode revalidado)
+

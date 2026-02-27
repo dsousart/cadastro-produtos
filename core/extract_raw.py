@@ -9,6 +9,7 @@ OCR_ASSET_ALLOWLIST = [
     "benefit",
     "fabric",
     "material",
+    "materials",
     "care",
     "micron",
     "wool",
@@ -18,6 +19,7 @@ OCR_ASSET_DENYLIST = [
     "gallery",
     "thumbnail",
     "thumb",
+    "product",
     "model",
     "lifestyle",
     "logo",
@@ -195,12 +197,18 @@ def _extract_html_unboundmerino(text: str) -> str:
     return combined
 
 
+DOMAIN_HTML_PARSERS = [
+    (["unboundmerino", "unbound merino"], _extract_html_unboundmerino),
+]
+
+
 def _extract_html(text: str, source_path: str = "") -> str:
     source_hint = f"{source_path} {text[:20000]}".lower()
-    if "unboundmerino" in source_hint or "unbound merino" in source_hint:
-        parsed = _extract_html_unboundmerino(text)
-        if parsed:
-            return parsed
+    for domain_tokens, parser in DOMAIN_HTML_PARSERS:
+        if any(token in source_hint for token in domain_tokens):
+            parsed = parser(text)
+            if parsed:
+                return parsed
     return _extract_html_generic(text)
 
 

@@ -1,4 +1,4 @@
-# Story 1.8: Hardening do clone e BK
+﻿# Story 1.8: Hardening do clone e BK
 
 **Epic:** Cadastro Premium
 **Story ID:** 1.8
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 8
 **Effort:** 8-10 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -264,3 +264,4 @@ _None yet - story not started._
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
 **Atualizado:** 2026-02-23 (Hardening completed)
+

@@ -1,4 +1,4 @@
-# Story 1.6: Add headless mode to BK scraper
+﻿# Story 1.6: Add headless mode to BK scraper
 
 **Epic:** Base Conhecimento
 **Story ID:** 1.6
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 5
 **Effort:** 4-6 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -158,6 +158,7 @@ pipeline/bk_scraper.py
 |-----------|-------|--------|--------|
 | 2026-02-23 | Story setup | Created story | Done |
 | 2026-02-23 | Headless | Implemented headless fetch | Done |
+| 2026-02-27 | Refinement | Added explicit fallback to requests when headless fetch is unavailable/fails | Done |
 
 ### Implementation Notes
 
@@ -207,9 +208,11 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-23 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Fixed headless fallback behavior and revalidated scraper execution | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
-**Atualizado:** 2026-02-23 (Headless implemented)
+**Atualizado:** 2026-02-27 (Headless fallback corrigido)
+

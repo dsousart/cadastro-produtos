@@ -1,4 +1,4 @@
-# Story 1.2: Add pipeline runner output adapter
+﻿# Story 1.2: Add pipeline runner output adapter
 
 **Epic:** Core Engine
 **Story ID:** 1.2
@@ -6,7 +6,7 @@
 **Priority:** Medium
 **Points:** 3
 **Effort:** 3-4 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -156,6 +156,7 @@ pipeline/run.py
 |-----------|-------|--------|--------|
 | 2026-02-23 | Story setup | Created story | Done |
 | 2026-02-23 | Runner | Implemented pipeline/run.py | Done |
+| 2026-02-27 | Validation rerun | Executed `pipeline/run.py` with `examples-input.json` and validated output adapter fields | Done |
 
 ### Implementation Notes
 
@@ -205,9 +206,11 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-23 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Revalidated runner output mapping and status | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
-**Atualizado:** 2026-02-23 (Runner implemented)
+**Atualizado:** 2026-02-27 (Runner revalidado)
+
