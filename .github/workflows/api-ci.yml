@@ -57,5 +57,5 @@ jobs:
 
       - name: Run API integration tests
         env:
-          PYTEST_ADDOPTS: "--cache-dir=/tmp/pytest-cache"
+          PYTEST_ADDOPTS: "-o cache_dir=/tmp/pytest-cache"
         run: python -m pytest -q api/tests/test_api_integration.py
