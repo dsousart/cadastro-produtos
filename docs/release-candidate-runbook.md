@@ -37,3 +37,4 @@ Fluxo recomendado para gerar RC com gate de qualidade obrigatoria.
 
 - Nao criar tag manual de RC fora deste workflow.
 - Qualquer falha no gate bloqueia publicacao da RC.
+- A promocao para release final deve usar o workflow `Release` (ver `docs/release-final-runbook.md`).

@@ -1,0 +1,140 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      rc_tag:
+        description: "Existing RC tag (ex: v0.3.0-rc.1)"
+        required: true
+        type: string
+      release_tag:
+        description: "Final release tag (ex: v0.3.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  api-gate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cadastro_produtos_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d cadastro_produtos_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/cadastro_produtos_ci
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/cadastro_produtos_ci
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout RC tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.rc_tag }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r api/requirements.txt -r api/requirements-dev.txt
+
+      - name: Run migrations
+        working-directory: api
+        run: python -m alembic -c alembic.ini upgrade head
+
+      - name: Run API integration tests
+        run: python -m pytest -q api/tests/test_api_integration.py
+
+      - name: Compile API
+        run: python -m compileall api
+
+  web-gate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - name: Checkout RC tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.rc_tag }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Release gate checks
+        run: npm run release:check
+
+      - name: Upload Playwright artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            web/playwright-report/
+            web/test-results/
+          if-no-files-found: ignore
+
+  publish-release:
+    runs-on: ubuntu-latest
+    needs: [api-gate, web-gate]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Guard - ensure RC tag exists
+        run: |
+          if ! git ls-remote --tags origin "refs/tags/${{ inputs.rc_tag }}" | grep -q "${{ inputs.rc_tag }}"; then
+            echo "RC tag '${{ inputs.rc_tag }}' does not exist on origin."
+            exit 1
+          fi
+
+      - name: Guard - fail if release tag exists
+        run: |
+          if git ls-remote --tags origin "refs/tags/${{ inputs.release_tag }}" | grep -q "${{ inputs.release_tag }}"; then
+            echo "Release tag '${{ inputs.release_tag }}' already exists on origin."
+            exit 1
+          fi
+
+      - name: Create final release tag from RC commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          RC_SHA="$(git rev-list -n 1 "${{ inputs.rc_tag }}")"
+          git tag "${{ inputs.release_tag }}" "$RC_SHA"
+          git push origin "${{ inputs.release_tag }}"
+
+      - name: Publish final release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          target_commitish: ${{ inputs.release_tag }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
