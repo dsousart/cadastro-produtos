@@ -1,0 +1,37 @@
+{
+  "sku": "CAM-001",
+  "nome_produto": "Camisa Oxford",
+  "descricao_bruta": "Camisa social em algodao com toque macio.",
+  "marca": "Lumen",
+  "categoria": "camisa",
+  "subcategoria": "social",
+  "tamanhos": ["P", "M", "G"],
+  "cores": ["Azul Marinho", "Branco"],
+  "composicao": "100% algodao",
+  "tecido": "oxford",
+  "modelagem": "regular",
+  "acabamento": "costuras reforcadas",
+  "colecao": "essenciais",
+  "preco": 299.9,
+  "promocao": {
+    "preco_promocional": 249.9,
+    "validade": "2026-03-31"
+  },
+  "imagens": [
+    "https://cdn.exemplo.com/cam-001-1.jpg",
+    "https://cdn.exemplo.com/cam-001-2.jpg",
+    "https://cdn.exemplo.com/cam-001-3.jpg"
+  ],
+  "guidelines_marca": {
+    "termos_proibidos": ["barato", "descartavel"]
+  },
+  "regras_categoria": {
+    "tamanhos_validos": ["P", "M", "G", "GG"],
+    "cores_validas": ["Azul Marinho", "Branco", "Preto"]
+  },
+  "restricoes_legais": {
+    "claims_proibidos": ["cura", "milagroso"]
+  },
+  "usuario": "demo",
+  "versao_pipeline": "1.0.0"
+}

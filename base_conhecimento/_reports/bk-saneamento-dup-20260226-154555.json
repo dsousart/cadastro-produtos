@@ -1,0 +1,16 @@
+[
+  {
+    "moved_at": "20260226-154555",
+    "source": "base_conhecimento\\tecidos\\20260226-153724-mens-merino-crew-neck-t-shirt-unbound-merino.md",
+    "target": "base_conhecimento\\_pendente\\20260226-153724-mens-merino-crew-neck-t-shirt-unbound-merino.md",
+    "reason": "older_reprocess_duplicate",
+    "replacement_kept": "base_conhecimento\\tecidos\\20260226-154530-mens-merino-crew-neck-t-shirt-unbound-merino.md"
+  },
+  {
+    "moved_at": "20260226-154555",
+    "source": "base_conhecimento\\tecidos\\20260226-154218-mens-merino-crew-neck-t-shirt-unbound-merino.md",
+    "target": "base_conhecimento\\_pendente\\20260226-154218-mens-merino-crew-neck-t-shirt-unbound-merino.md",
+    "reason": "older_reprocess_duplicate",
+    "replacement_kept": "base_conhecimento\\tecidos\\20260226-154530-mens-merino-crew-neck-t-shirt-unbound-merino.md"
+  }
+]

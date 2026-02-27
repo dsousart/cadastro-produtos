@@ -1,0 +1,141 @@
+# Exemplo de Saida (Pipeline)
+
+## Resumo
+- resultado: aprovado
+- score_qualidade: 85
+- falhas nao bloqueantes:
+  - Conteudo curto (titulo/descricao)
+  - SEO curto (meta description)
+
+## JSON
+```json
+{
+  "titulo": "camisa Camisa Oxford Lumen premium masculino",
+  "subtitulo": "oxford regular. acabamento costuras reforcadas. colecao essenciais. ideal para uso versatil e duradouro",
+  "descricao": "Camisa Oxford Lumen em oxford com regular. Composicao: 100% algodao. Acabamento: costuras reforcadas. Projetado para um publico masculino 30+ que valoriza qualidade, caimento e versatilidade. Ideal para composicoes que exigem conforto e visual alinhado ao dia a dia.",
+  "bullet_points": [
+    "Tecido oxford com toque premium",
+    "Modelagem regular para bom caimento",
+    "Cores: Azul Marinho, Branco",
+    "Tamanhos: P, M, G",
+    "Versatil para diferentes ocasioes"
+  ],
+  "atributos_normalizados": {
+    "categoria": "camisa",
+    "subcategoria": "social",
+    "tecido": "oxford",
+    "composicao": "100% algodao",
+    "modelagem": "regular",
+    "acabamento": "costuras reforcadas",
+    "colecao": "essenciais",
+    "cores": [
+      "Azul Marinho",
+      "Branco"
+    ],
+    "tamanhos": [
+      "P",
+      "M",
+      "G"
+    ]
+  },
+  "tags": [
+    "camisa",
+    "social",
+    "oxford",
+    "regular",
+    "costuras-reforcadas",
+    "essenciais",
+    "azul-marinho",
+    "branco"
+  ],
+  "seo": {
+    "meta_title": "camisa Camisa Oxford Lumen premium masculino",
+    "meta_description": "oxford regular. acabamento costuras reforcadas. colecao essenciais. ideal para uso versatil e duradouro",
+    "slug": "camisa-camisa-oxford-lumen"
+  },
+  "score_qualidade": 85,
+  "auditoria": {
+    "audit_id": "449f7e72-19b1-4ac4-9ec6-8bcea8170554",
+    "timestamp": "2026-02-23T19:57:01.621950+00:00",
+    "usuario": "demo",
+    "versao_pipeline": "1.0.0",
+    "resultado": "aprovado",
+    "motivos_reprovacao": [
+      "Conteudo: Lengths - titulo:44 subtitulo:103 descricao:266",
+      "SEO: meta_title:44 meta_description:103"
+    ],
+    "detalhes": [
+      {
+        "area": "Dados obrigatorios",
+        "regra": "SKU, nome, categoria, preco, imagens presentes",
+        "severidade": "Alta",
+        "status": "pass",
+        "evidencia": "OK"
+      },
+      {
+        "area": "Padronizacao",
+        "regra": "Tamanhos e cores seguem dicionario",
+        "severidade": "Media",
+        "status": "pass",
+        "evidencia": "OK"
+      },
+      {
+        "area": "Conteudo",
+        "regra": "Titulo 55-70, subtitulo 90-130, descricao 600-900",
+        "severidade": "Media",
+        "status": "fail",
+        "evidencia": "Lengths - titulo:44 subtitulo:103 descricao:266"
+      },
+      {
+        "area": "Marca",
+        "regra": "Tom de voz e termos proibidos respeitados",
+        "severidade": "Alta",
+        "status": "pass",
+        "evidencia": "OK"
+      },
+      {
+        "area": "Legal",
+        "regra": "Sem claims proibidos",
+        "severidade": "Alta",
+        "status": "pass",
+        "evidencia": "OK"
+      },
+      {
+        "area": "SEO",
+        "regra": "Meta title <= 60, meta description 140-160",
+        "severidade": "Baixa",
+        "status": "fail",
+        "evidencia": "meta_title:44 meta_description:103"
+      },
+      {
+        "area": "Imagens",
+        "regra": "Min 3 imagens, resolucao minima",
+        "severidade": "Media",
+        "status": "pass",
+        "evidencia": "OK"
+      },
+      {
+        "area": "Preco/Promocao",
+        "regra": "Preco valido, promocao consistente",
+        "severidade": "Media",
+        "status": "pass",
+        "evidencia": "OK"
+      },
+      {
+        "area": "Duplicidade",
+        "regra": "Nao duplicar nome + marca + atributos-chave",
+        "severidade": "Alta",
+        "status": "skip",
+        "evidencia": "No similarity index"
+      },
+      {
+        "area": "Qualidade editorial",
+        "regra": "Ortografia e fluidez",
+        "severidade": "Baixa",
+        "status": "pass",
+        "evidencia": "OK"
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,20 @@
+[
+  {
+    "moved_at": "20260226-154923",
+    "source": "base_conhecimento\\tecidos\\20260223-212155-mensmerinocrewnecktshirtunboundmerino.md",
+    "target": "base_conhecimento\\_pendente\\20260223-212155-mensmerinocrewnecktshirtunboundmerino.md",
+    "reason": "active_bk_short_low_density_warning_cleanup"
+  },
+  {
+    "moved_at": "20260226-154923",
+    "source": "base_conhecimento\\tecidos\\20260223-214901-mensmerinocrewnecktshirtunboundmerino.md",
+    "target": "base_conhecimento\\_pendente\\20260223-214901-mensmerinocrewnecktshirtunboundmerino.md",
+    "reason": "active_bk_short_low_density_warning_cleanup"
+  },
+  {
+    "moved_at": "20260226-154923",
+    "source": "base_conhecimento\\tecnologias\\20260223-214901-emenscrewnecktshirt100.md",
+    "target": "base_conhecimento\\_pendente\\20260223-214901-emenscrewnecktshirt100.md",
+    "reason": "active_bk_short_low_density_warning_cleanup"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "moved_at": "20260226-153359",
+    "source": "base_conhecimento\\tecidos\\20260223-211532-mensmerinocrewnecktshirtunboundmerino.md",
+    "target": "base_conhecimento\\_pendente\\20260223-211532-mensmerinocrewnecktshirtunboundmerino.md",
+    "reason": "bk_validator_ruido_error",
+    "errors": [
+      "Ruido: Excesso de termos de ruído (210)",
+      "Ruido: Conteudo de reviews detectado em Detalhes"
+    ]
+  },
+  {
+    "moved_at": "20260226-153359",
+    "source": "base_conhecimento\\tecidos\\20260223-211615-mensmerinocrewnecktshirtunboundmerino.md",
+    "target": "base_conhecimento\\_pendente\\20260223-211615-mensmerinocrewnecktshirtunboundmerino.md",
+    "reason": "bk_validator_ruido_error",
+    "errors": [
+      "Ruido: Excesso de termos de ruído (210)",
+      "Ruido: Conteudo de reviews detectado em Detalhes"
+    ]
+  },
+  {
+    "moved_at": "20260226-153359",
+    "source": "base_conhecimento\\tecidos\\20260223-211735-mensmerinocrewnecktshirtunboundmerino.md",
+    "target": "base_conhecimento\\_pendente\\20260223-211735-mensmerinocrewnecktshirtunboundmerino.md",
+    "reason": "bk_validator_ruido_error",
+    "errors": [
+      "Ruido: Excesso de termos de ruído (210)",
+      "Ruido: Conteudo de reviews detectado em Detalhes"
+    ]
+  }
+]

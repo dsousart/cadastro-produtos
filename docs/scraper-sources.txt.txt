@@ -1,0 +1,30 @@
+DOMAINS
+
+https://www.lawe.com.br/
+https://minimalclub.com.br/
+https://www.insiderstore.com.br/
+https://ii.loropiana.com/en/
+https://www.zegna.com/ww-en/
+https://www.aramis.com.br/
+https://www.urban.com.br/
+https://www.oficinareserva.com/
+https://www.tailorsmind.com.br/
+https://www.buckmason.com/?g=men
+https://www.taylorstitch.com/
+https://www.ministryofsupply.com/
+https://unboundmerino.com/collections/mens-merino-wool-clothing/products/merino-wool-crew-neck-t-shirt?variant=15398199918686
+
+
+ESCOPO
+Páginas de produto 
+Descrição de produto
+Tecnologia
+
+
+VOLUME/FREQUENCIA
+- 5000 páginas 
+- Mensal
+
+RESTRICOES:
+  - apenas conteudo publico
+  - respeitar robots.txt

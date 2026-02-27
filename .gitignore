@@ -1,0 +1,42 @@
+
+
+# Environment & Secrets (AIOS)
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Dependencies (AIOS)
+node_modules/
+node_modules
+.next/
+
+# Build & Logs (AIOS)
+dist/
+build/
+*.log
+logs/
+.pytest_cache/
+pytest-cache-files-*/
+__pycache__/
+*.pyc
+web/test-results/
+*.tsbuildinfo
+
+# Large generated/local data
+bk_extracted/
+bk_extracted_reprocess_*/
+raw_concorrentes/
+base_conhecimento/_raw/
+
+# IDE & OS (AIOS)
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# AIOS Local (AIOS)
+.aios-core/local/
+.claude/settings.local.json
+.aios/install-log.txt

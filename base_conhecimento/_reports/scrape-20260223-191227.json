@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-02-23T19:12:27.213365",
+  "domains": {
+    "https://www.aramis.com.br": {
+      "visited": 1,
+      "saved": 0,
+      "filtered": 0,
+      "robots_blocked": 1,
+      "http_error": 0,
+      "fetch_error": 0
+    }
+  },
+  "urls_especificas": {
+    "requested": 0,
+    "saved": 0
+  }
+}

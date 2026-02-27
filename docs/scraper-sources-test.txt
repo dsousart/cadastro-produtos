@@ -1,0 +1,10 @@
+﻿DOMAINS:
+- https://www.tailorsmind.com.br
+
+URLS_ESPECIFICAS:
+
+INCLUDE_PATHS:
+- https://www.tailorsmind.com.br: /men,/masculino,/homem,/camisas,/camisetas,/calcas,/alfaiataria,/tecnologia
+
+EXCLUDE_PATHS:
+- https://www.tailorsmind.com.br: /women,/feminino,/kids,/infantil

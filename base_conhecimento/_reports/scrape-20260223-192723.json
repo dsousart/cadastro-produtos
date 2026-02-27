@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-02-23T19:27:23.505384",
+  "domains": {
+    "https://www.tailorsmind.com.br": {
+      "visited": 0,
+      "saved": 0,
+      "filtered": 0,
+      "robots_blocked": 0,
+      "http_error": 0,
+      "fetch_error": 0,
+      "sitemap_urls": 0
+    }
+  },
+  "urls_especificas": {
+    "requested": 0,
+    "saved": 0
+  }
+}

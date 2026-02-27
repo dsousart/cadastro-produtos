@@ -1,0 +1,53 @@
+﻿DOMAINS:
+- https://www.lawe.com.br
+- https://minimalclub.com.br
+- https://www.insiderstore.com.br
+- https://ii.loropiana.com/en
+- https://www.zegna.com/ww-en
+- https://www.aramis.com.br
+- https://www.urban.com.br
+- https://www.oficinareserva.com
+- https://www.tailorsmind.com.br
+- https://www.buckmason.com
+- https://www.taylorstitch.com
+- https://www.ministryofsupply.com
+
+URLS_ESPECIFICAS:
+- https://unboundmerino.com/collections/mens-merino-wool-clothing/products/merino-wool-crew-neck-t-shirt?variant=15398199918686
+
+INCLUDE_PATHS:
+- https://www.lawe.com.br: /masculino,/men,/homem,/camisas,/camisetas,/calcas,/jaquetas
+- https://minimalclub.com.br: /masculino,/men,/homem,/camisas,/camisetas,/calcas,/jaquetas
+- https://www.insiderstore.com.br: /masculino,/men,/homem,/camisas,/camisetas,/calcas,/jaquetas,/tecnologia
+- https://www.aramis.com.br: /masculino,/men,/homem,/camisas,/camisetas,/calcas,/alfaiataria
+- https://www.oficinareserva.com: /masculino,/men,/homem,/camisas,/camisetas,/calcas
+- https://www.buckmason.com: /men,/mens,/shirts,/tees,/pants,/denim
+- https://www.taylorstitch.com: /men,/mens,/shirts,/tees,/pants,/denim
+- https://www.ministryofsupply.com: /men,/mens,/shirts,/tees,/pants,/technology
+- https://ii.loropiana.com/en: /men,/mens,/man
+- https://www.zegna.com/ww-en: /men,/mens,/man
+
+EXCLUDE_PATHS:
+- https://www.lawe.com.br: /feminino,/women,/kids,/infantil
+- https://minimalclub.com.br: /feminino,/women,/kids,/infantil
+- https://www.insiderstore.com.br: /feminino,/women,/kids,/infantil
+- https://www.aramis.com.br: /feminino,/women,/kids,/infantil
+- https://www.oficinareserva.com: /feminino,/women,/kids,/infantil
+- https://www.buckmason.com: /women,/kids
+- https://www.taylorstitch.com: /women,/kids
+- https://www.ministryofsupply.com: /women,/kids
+- https://ii.loropiana.com/en: /women,/kids
+- https://www.zegna.com/ww-en: /women,/kids
+
+ESCOPO:
+- paginas de produto
+- descricao de produto
+- tecnologia
+
+VOLUME/FREQUENCIA:
+- 5000 paginas
+- mensal
+
+RESTRICOES:
+- apenas conteudo publico
+- respeitar robots.txt

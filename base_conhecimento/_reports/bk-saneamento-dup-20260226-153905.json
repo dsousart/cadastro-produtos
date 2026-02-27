@@ -1,0 +1,9 @@
+[
+  {
+    "moved_at": "20260226-153905",
+    "source": "base_conhecimento\\tecidos\\20260226-153609-mens-merino-crew-neck-t-shirt-unbound-merino.md",
+    "target": "base_conhecimento\\_pendente\\20260226-153609-mens-merino-crew-neck-t-shirt-unbound-merino.md",
+    "reason": "duplicate_reprocess_inferior_version",
+    "replacement_kept": "base_conhecimento/tecidos/20260226-153724-mens-merino-crew-neck-t-shirt-unbound-merino.md"
+  }
+]
