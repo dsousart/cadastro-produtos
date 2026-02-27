@@ -145,6 +145,28 @@ def _fetch_headless(url: str, timeout: int = 20) -> Tuple[int, str]:
     return status, html
 
 
+def _fetch_with_fallback(url: str, use_headless: bool) -> Tuple[int, str]:
+    if not use_headless:
+        try:
+            return _fetch(url)
+        except Exception:
+            return 0, ""
+
+    # Try headless first for anti-bot pages, then degrade gracefully to requests.
+    try:
+        status, html = _fetch_headless(url)
+    except Exception:
+        status, html = 0, ""
+
+    if status > 0 and status < 400 and html:
+        return status, html
+
+    try:
+        return _fetch(url)
+    except Exception:
+        return 0, ""
+
+
 def _fetch_sitemap(url: str, timeout: int = 15) -> Tuple[int, str]:
     return _fetch(url, timeout=timeout)
 
@@ -248,14 +270,8 @@ def crawl_domain(
             stats["filtered"] += 1
             continue
 
-        try:
-            status, html = (
-                _fetch_headless(url) if use_headless else _fetch(url)
-            )
-        except Exception:
-            stats["fetch_error"] += 1
-            continue
-        if status == 0 and use_headless:
+        status, html = _fetch_with_fallback(url, use_headless)
+        if status == 0:
             stats["fetch_error"] += 1
             continue
         if status >= 400:
@@ -320,11 +336,8 @@ def _crawl_from_sitemaps(
         if not _filter_url(url, merged_include, merged_exclude):
             stats["filtered"] += 1
             continue
-        try:
-            status, html = (
-                _fetch_headless(url) if use_headless else _fetch(url)
-            )
-        except Exception:
+        status, html = _fetch_with_fallback(url, use_headless)
+        if status == 0:
             stats["fetch_error"] += 1
             continue
         if status >= 400:
@@ -398,13 +411,8 @@ def run_scraper(
         report["domains"][domain] = stats
 
     for url in urls:
-        try:
-            status, html = (
-                _fetch_headless(url) if use_headless else _fetch(url)
-            )
-        except Exception:
-            continue
-        if status == 0 and use_headless:
+        status, html = _fetch_with_fallback(url, use_headless)
+        if status == 0:
             continue
         if status >= 400:
             continue
