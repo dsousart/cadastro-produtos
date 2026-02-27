@@ -33,6 +33,7 @@
 - presets de links operacionais em `/produtos` (`Revisao editorial`, `Aprovados`, `Score alto`)
 - acao de resetar visao em `/produtos` (limpa query params e estado da listagem)
 - smoke E2E para `copiar link da visao` e `resetar visao` em `/produtos`
+- smoke E2E para presets de link em `/produtos` + ajuste de comportamento de aplicacao
 - empty states guiados em `Produtos` e `Jobs` com CTA operacional
 - smoke E2E inicial com Playwright para `/produtos`, `/gerar` e `/jobs`
 - smoke E2E expandido para `/health` e validacao de query-state inicial em `/produtos`

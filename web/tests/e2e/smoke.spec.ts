@@ -129,6 +129,30 @@ test("produtos: copiar link da visao mostra feedback", async ({ page }) => {
   await expect(page.getByText("Link da visao atual copiado.")).toBeVisible();
 });
 
+test("produtos: presets de link aplicam filtros esperados", async ({ page }) => {
+  await page.route("**/api/products**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [],
+        pagination: { total: 0, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.goto("/produtos");
+
+  await page.getByRole("button", { name: "Link: Revisao editorial" }).click();
+  await expect(page).toHaveURL(/\/produtos\?(?=.*status=generated)(?=.*q=camisa)/);
+
+  await page.getByRole("button", { name: "Link: Aprovados" }).click();
+  await expect(page).toHaveURL(/\/produtos\?.*status=approved/);
+
+  await page.getByRole("button", { name: "Link: Score alto" }).click();
+  await expect(page).toHaveURL(/\/produtos\?(?=.*status=generated)(?=.*min_score=85)/);
+});
+
 test("jobs: cria job e completa polling", async ({ page }) => {
   let pollCount = 0;
 

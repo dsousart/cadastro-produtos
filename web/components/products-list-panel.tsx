@@ -244,24 +244,23 @@ export function ProductsListPanel({
   }
 
   function applyLinkPreset(preset: "editorial" | "approved" | "highScore") {
-    const params = new URLSearchParams();
-    params.set("limit", String(limit));
-    params.set("offset", "0");
-    params.set("sort_by", "created_at");
-    params.set("sort_dir", "desc");
-
+    setOffset(0);
+    setSortBy("created_at");
+    setSortDir("desc");
     if (preset === "approved") {
-      params.set("status", "approved");
+      setStatusFilter("approved");
+      setMinScore("");
+      setSearchTerm("");
     } else if (preset === "highScore") {
-      params.set("status", "generated");
-      params.set("min_score", "85");
+      setStatusFilter("generated");
+      setMinScore("85");
+      setSearchTerm("");
     } else {
-      params.set("status", "generated");
-      params.set("q", "camisa");
+      setStatusFilter("generated");
+      setMinScore("");
+      setSearchTerm("camisa");
     }
 
-    const qs = params.toString();
-    router.push(`${pathname}?${qs}`);
     setShareFeedback(`Preset aplicado: ${preset}.`);
     window.setTimeout(() => setShareFeedback(null), 1400);
   }
