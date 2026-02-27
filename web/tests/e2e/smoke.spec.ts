@@ -26,6 +26,32 @@ test("gerar: carrega formulario principal", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Gerar produto" })).toBeVisible();
 });
 
+test("health: exibe painel de health na rota dedicada", async ({ page }) => {
+  await page.goto("/health");
+  await expect(page.getByRole("heading", { name: "Health payload (amostra)" })).toBeVisible();
+});
+
+test("produtos: aplica estado inicial de query params", async ({ page }) => {
+  await page.route("**/api/products**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [],
+        pagination: { total: 0, limit: 5, offset: 0 },
+      }),
+    });
+  });
+
+  await page.goto("/produtos?q=camisa&status=approved&min_score=85&sort_by=sku&sort_dir=asc&limit=5&offset=0");
+  await expect(page.getByLabel("Busca (SKU / nome / marca)")).toHaveValue("camisa");
+  await expect(page.getByLabel("Status")).toHaveValue("approved");
+  await expect(page.getByLabel("Min score")).toHaveValue("85");
+  await expect(page.getByLabel("Ordenar por")).toHaveValue("sku");
+  await expect(page.getByLabel("Direcao")).toHaveValue("asc");
+  await expect(page.getByLabel("Limite")).toHaveValue("5");
+});
+
 test("jobs: cria job e completa polling", async ({ page }) => {
   let pollCount = 0;
 
