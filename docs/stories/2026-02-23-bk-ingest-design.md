@@ -1,4 +1,4 @@
-# Story 1.3: Design pipeline de ingestao e classificacao da base de conhecimento
+﻿# Story 1.3: Design pipeline de ingestao e classificacao da base de conhecimento
 
 **Epic:** Base Conhecimento
 **Story ID:** 1.3
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 5
 **Effort:** 5-7 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Documentation
 
 ---
@@ -222,3 +222,4 @@ _None yet - story not started._
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
 **Atualizado:** 2026-02-23 (Pipeline documented)
+

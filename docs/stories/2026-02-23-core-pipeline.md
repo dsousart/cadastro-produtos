@@ -1,4 +1,4 @@
-# Story 1.1: Implement core pipeline for premium cadastro
+﻿# Story 1.1: Implement core pipeline for premium cadastro
 
 **Epic:** Core Engine
 **Story ID:** 1.1
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 5
 **Effort:** 6-8 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -185,6 +185,7 @@ pipeline/pipeline.py
 | 2026-02-23 | Story setup | Created story | Done |
 | 2026-02-23 | Core modules | Implemented core modules | Done |
 | 2026-02-23 | Pipeline | Implemented pipeline | Done |
+| 2026-02-27 | Validation rerun | Executed pipeline with `examples-input.json` and confirmed expected output/auditoria fields | Done |
 
 ### Implementation Notes
 
@@ -234,9 +235,11 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-23 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Revalidated pipeline behavior against acceptance fields | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
-**Atualizado:** 2026-02-23 (Core and pipeline implemented)
+**Atualizado:** 2026-02-27 (Core pipeline revalidado)
+

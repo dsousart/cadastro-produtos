@@ -1,4 +1,4 @@
-# Story 1.5: Implement CLI scraper para fontes web
+﻿# Story 1.5: Implement CLI scraper para fontes web
 
 **Epic:** Base Conhecimento
 **Story ID:** 1.5
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 8
 **Effort:** 8-10 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -171,6 +171,7 @@ pipeline/bk_scraper.py
 |-----------|-------|--------|--------|
 | 2026-02-23 | Story setup | Created story | Done |
 | 2026-02-23 | Scraper | Implemented pipeline/bk_scraper.py | Done |
+| 2026-02-27 | Validation rerun | Executed scraper with test config and confirmed robots enforcement (`robots_blocked=1`) with limit control | Done |
 
 ### Implementation Notes
 
@@ -220,9 +221,11 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-23 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Revalidated CLI scraper execution with report evidence | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
-**Atualizado:** 2026-02-23 (Scraper implemented)
+**Atualizado:** 2026-02-27 (Scraper revalidado)
+

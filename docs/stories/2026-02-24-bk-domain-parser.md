@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 5
 **Effort:** 5-7 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -167,6 +167,7 @@ docs/roadmap-proximos-passos.md
 | 2026-02-24 | Story setup | Created story | Done |
 | 2026-02-26 | Phase 1-2 | Added domain parser (`unboundmerino`) + generic fallback | Done |
 | 2026-02-26 | Phase 3 | Reprocessed saved HTML and compared output size/noise | Done |
+| 2026-02-27 | Refinement | Added explicit domain parser map (`domain -> parser`) and revalidated extraction output | Done |
 
 ### Implementation Notes
 
@@ -219,9 +220,10 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-24 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Finalized status to Done and refined domain parser mapping | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-24
-**Atualizado:** 2026-02-24 (Story created)
+**Atualizado:** 2026-02-27 (Story concluida e refinada)

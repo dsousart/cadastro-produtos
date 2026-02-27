@@ -1,4 +1,4 @@
-# Story 1.4: Implement ingest pipeline CLI for base de conhecimento
+﻿# Story 1.4: Implement ingest pipeline CLI for base de conhecimento
 
 **Epic:** Base Conhecimento
 **Story ID:** 1.4
@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 8
 **Effort:** 8-10 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -35,7 +35,7 @@ Implementar um pipeline CLI-first que:
 - normaliza,
 - gera markdown estruturado,
 - classifica em `tecidos`, `modelagem`, `tecnologias`,
-- encaminha casos ambíguos para `_pendente`.
+- encaminha casos ambÃ­guos para `_pendente`.
 
 ---
 
@@ -66,7 +66,7 @@ GIVEN arquivos PDF, HTML e TXT
 WHEN executar o CLI de ingestao
 THEN deve gerar markdown estruturado por item
 AND classificar em tecidos/modelagem/tecnologias
-AND mover ambíguos para _pendente
+AND mover ambÃ­guos para _pendente
 ```
 
 ---
@@ -174,6 +174,7 @@ pipeline/bk_ingest.py
 |-----------|-------|--------|--------|
 | 2026-02-23 | Story setup | Created story | Done |
 | 2026-02-23 | Ingest CLI | Implemented pipeline/bk_ingest.py | Done |
+| 2026-02-27 | Validation rerun | Executed `pipeline/bk_ingest.py` with `bk-sample.txt` and confirmed output in `_raw` + category folder | Done |
 
 ### Implementation Notes
 
@@ -223,9 +224,11 @@ _None yet - story not started._
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-23 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Revalidated ingest CLI flow with local sample | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-23
-**Atualizado:** 2026-02-23 (Ingest CLI implemented)
+**Atualizado:** 2026-02-27 (Ingest CLI revalidado)
+

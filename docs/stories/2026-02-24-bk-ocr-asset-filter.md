@@ -6,7 +6,7 @@
 **Priority:** High
 **Points:** 3
 **Effort:** 3-4 hours
-**Status:** Ready
+**Status:** Done
 **Type:** Feature
 
 ---
@@ -162,6 +162,7 @@ core/extract_raw.py
 | 2026-02-24 | Story setup | Created story | Done |
 | 2026-02-26 | Phase 1-2 | Added OCR asset allowlist/denylist + stdout counters | Done |
 | 2026-02-26 | Phase 3 | Ran `extract_raw.py --ocr` and validated eligibility reduction | Done |
+| 2026-02-27 | Refinement | Expanded heuristics (`materials`, `product`) and revalidated extraction/quality gates | Done |
 
 ### Implementation Notes
 
@@ -217,9 +218,10 @@ Nenhum bloqueio na implementacao do filtro. OCR efetivo continua dependente do a
 | Date | Version | Changes | Author |
 |------|---------|---------|--------|
 | 2026-02-24 | 1.0.0 | Initial story creation | @dev |
+| 2026-02-27 | 1.0.1 | Finalized status to Done and tightened OCR asset heuristics | @dev |
 
 ---
 
 **Criado por:** Codex (@dev)
 **Data:** 2026-02-24
-**Atualizado:** 2026-02-24 (Story created)
+**Atualizado:** 2026-02-27 (Story concluida e refinada)
