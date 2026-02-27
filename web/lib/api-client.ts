@@ -13,6 +13,16 @@ export class ApiClientError extends Error {
 function extractErrorMessage(body: unknown, fallback: string) {
   if (body && typeof body === "object") {
     const obj = body as Record<string, unknown>;
+    if (Array.isArray(obj.detail) && obj.detail.length > 0) {
+      const first = obj.detail[0];
+      if (first && typeof first === "object") {
+        const issue = first as Record<string, unknown>;
+        const loc = Array.isArray(issue.loc) ? issue.loc.join(".") : "";
+        const msg = typeof issue.msg === "string" ? issue.msg : "";
+        if (msg && loc) return `${msg} (campo: ${loc})`;
+        if (msg) return msg;
+      }
+    }
     if (typeof obj.detail === "string" && obj.detail) return obj.detail;
     if (typeof obj.message === "string" && obj.message) return obj.message;
     if (typeof obj.error === "string" && obj.error) return obj.error;

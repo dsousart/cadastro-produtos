@@ -46,7 +46,7 @@ function buildSampleBatchPayload() {
         colecao: "essenciais",
         preco: 299.9,
         promocao: null,
-        imagens: [],
+        imagens: ["https://cdn.exemplo.com/cam-job-web-1.jpg"],
         guidelines_marca: { termos_proibidos: [] },
         regras_categoria: { tamanhos_validos: [], cores_validas: [] },
         restricoes_legais: { claims_proibidos: [] },
@@ -84,6 +84,16 @@ export function GenerationJobsPanel({ onJobCompleted }: GenerationJobsPanelProps
       (jobStatus.status === "pending" || jobStatus.status === "running"),
     [autoPollingEnabled, jobStatus],
   );
+  const errorHint = useMemo(() => {
+    if (!error) return null;
+    if (createStatus === 422) {
+      return "Revise o JSON do payload (campos obrigatorios e imagens com URL valida).";
+    }
+    if (createStatus === 503) {
+      return "API sem banco configurado para operacao de jobs. Verifique o ambiente local.";
+    }
+    return null;
+  }, [createStatus, error]);
 
   useEffect(() => {
     try {
@@ -217,6 +227,9 @@ export function GenerationJobsPanel({ onJobCompleted }: GenerationJobsPanelProps
         <p>
           Painel inicial para `POST /api/v1/generation-jobs` e acompanhamento de status por polling.
         </p>
+        <p className="muted-inline">
+          Quando o job concluir, a interface direciona automaticamente para <strong>Produtos</strong>.
+        </p>
       </div>
 
       <div className="form-actions">
@@ -252,6 +265,7 @@ export function GenerationJobsPanel({ onJobCompleted }: GenerationJobsPanelProps
         ) : null}
         {copyFeedback ? <span className="ok">{copyFeedback}</span> : null}
         {error ? <span className="warn">{error}</span> : null}
+        {errorHint ? <span className="muted-inline">{errorHint}</span> : null}
       </div>
 
       <div className="jobs-preferences">

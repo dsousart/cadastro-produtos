@@ -356,6 +356,11 @@ export function ProductsListPanel({
       <div className="section-head">
         <h2>Produtos gerados (listagem paginada)</h2>
         <p>Consulta `GET /api/v1/products` via proxy do Next (`/api/products`).</p>
+        {error && lastResponseStatus === 503 ? (
+          <p className="warn">
+            Listagem indisponivel sem banco configurado. Ative a conexao da API com PostgreSQL para consultar produtos.
+          </p>
+        ) : null}
       </div>
 
       <div className="filters-grid">
@@ -566,6 +571,11 @@ export function ProductsListPanel({
             <button type="button" onClick={() => router.push("/gerar")}>
               Ir para Gerar
             </button>
+            {lastResponseStatus === 503 ? (
+              <button type="button" onClick={() => router.push("/health")}>
+                Ver Health
+              </button>
+            ) : null}
           </div>
         </div>
       ) : null}

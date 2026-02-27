@@ -64,7 +64,7 @@ function toPayload(state: FormState) {
     colecao: state.colecao.trim(),
     preco: Number(state.preco),
     promocao: null,
-    imagens: [],
+    imagens: ["https://cdn.exemplo.com/cam-001-1.jpg"],
     guidelines_marca: { termos_proibidos: [] },
     regras_categoria: { tamanhos_validos: [], cores_validas: [] },
     restricoes_legais: { claims_proibidos: [] },
@@ -85,6 +85,19 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
   const [responseBody, setResponseBody] = useState<unknown | null>(null);
 
   const payloadPreview = useMemo(() => toPayload(form), [form]);
+  const errorHint = useMemo(() => {
+    if (!error) return null;
+    if (responseStatus === 422) {
+      return "Revise os campos obrigatorios do payload (SKU, preco > 0 e ao menos 1 URL em imagens).";
+    }
+    if (responseStatus === 500) {
+      return "Falha interna no processamento. Tente novamente e, se persistir, confira a aba Health.";
+    }
+    if (responseStatus === 503) {
+      return "Servico indisponivel no momento. Verifique se a API e o banco estao ativos.";
+    }
+    return null;
+  }, [error, responseStatus]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -134,6 +147,9 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
         <p>
           Formulario inicial para enviar payload para `POST /api/v1/products` via proxy do Next
           (`/api/products`).
+        </p>
+        <p className="muted-inline">
+          Ao gerar com sucesso, voce sera direcionado para <strong>Produtos</strong> com o item em foco.
         </p>
       </div>
 
@@ -261,6 +277,7 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
           </button>
           {responseStatus !== null ? <span>Status HTTP: {responseStatus}</span> : null}
           {error ? <span className="warn">{error}</span> : null}
+          {errorHint ? <span className="muted-inline">{errorHint}</span> : null}
         </div>
       </form>
 
