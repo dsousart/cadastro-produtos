@@ -53,4 +53,17 @@ describe("ProductGeneratorForm", () => {
 
     expect(screen.getByText("Falha de rede")).toBeInTheDocument();
   });
+
+  it("mantem SKU no onCreated quando API nao retorna product_id", async () => {
+    const onCreated = vi.fn();
+    postJsonMock.mockResolvedValueOnce({ input_payload: { sku: "CAM-001-WEB" } });
+
+    render(<ProductGeneratorForm onCreated={onCreated} />);
+    await userEvent.click(screen.getByRole("button", { name: "Gerar produto" }));
+
+    expect(onCreated).toHaveBeenCalledWith({ productId: null, sku: "CAM-001-WEB" });
+    expect(
+      screen.getByText("Produto criado com sucesso. Abrindo a tela de Produtos para revisao."),
+    ).toBeInTheDocument();
+  });
 });

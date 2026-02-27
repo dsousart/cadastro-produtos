@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from typing import Any, Dict, Literal, Optional
 
 from sqlalchemy import Select, func, or_, select
@@ -85,3 +86,20 @@ def list_products(
 def get_product_by_id(db: Session, product_id: str) -> Optional[Product]:
     stmt = select(Product).where(Product.id == product_id)
     return db.execute(stmt).scalar_one_or_none()
+
+
+def update_product_status(
+    db: Session,
+    *,
+    product_id: str,
+    status: Literal["in_review", "approved", "rejected"],
+) -> Optional[Product]:
+    record = get_product_by_id(db, product_id)
+    if record is None:
+        return None
+    record.status = status
+    record.updated_at = datetime.now(timezone.utc)
+    db.add(record)
+    db.flush()
+    db.refresh(record)
+    return record

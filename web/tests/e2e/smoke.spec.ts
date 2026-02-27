@@ -263,6 +263,68 @@ test("e2e: gerar -> jobs -> produtos com focus atualizado", async ({ page }) => 
   await expect(page.locator(".detail-summary-grid code").first()).toHaveText("prod-from-job-001");
 });
 
+test("e2e: gerar sem product_id redireciona com fallback por SKU e abre detalhe", async ({ page }) => {
+  await page.route("**/api/products", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        input_payload: { sku: "CAM-001-WEB" },
+      }),
+    });
+  });
+
+  await page.route("**/api/products?**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [
+          {
+            id: "prod-sku-fallback-001",
+            sku: "CAM-001-WEB",
+            nome_produto: "Camisa Oxford",
+            marca: "Lumen",
+            status: "generated",
+            score_qualidade: 84,
+            created_at: "2026-02-27T10:00:00Z",
+          },
+        ],
+        pagination: { total: 1, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.route("**/api/products/prod-sku-fallback-001", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "prod-sku-fallback-001",
+        sku: "CAM-001-WEB",
+        nome_produto: "Camisa Oxford",
+        marca: "Lumen",
+        status: "generated",
+        score_qualidade: 84,
+        input_payload: {},
+        output_payload: {},
+        created_at: "2026-02-27T10:00:00Z",
+        updated_at: "2026-02-27T10:06:00Z",
+      }),
+    });
+  });
+
+  await page.goto("/gerar");
+  await page.getByRole("button", { name: "Gerar produto" }).click();
+
+  await expect(page).toHaveURL(/\/produtos\?(?=.*q=CAM-001-WEB)(?=.*focus_sku=CAM-001-WEB)/);
+  await expect(page.locator(".detail-summary-grid code").first()).toHaveText("prod-sku-fallback-001");
+});
+
 test("jobs: cria job e completa polling", async ({ page }) => {
   let pollCount = 0;
 
@@ -322,6 +384,67 @@ test("produtos: exibe erro de API quando listagem falha", async ({ page }) => {
 
   await page.goto("/produtos");
   await expect(page.getByText("Erro interno na listagem")).toBeVisible();
+});
+
+test("produtos: atualiza status editorial pelo detalhe", async ({ page }) => {
+  await page.route("**/api/products?**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [
+          {
+            id: "prod-editorial-001",
+            sku: "CAM-EDITORIAL-001",
+            nome_produto: "Camisa Editorial",
+            marca: "Lumen",
+            status: "generated",
+            score_qualidade: 88,
+            created_at: "2026-02-27T10:00:00Z",
+          },
+        ],
+        pagination: { total: 1, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.route("**/api/products/prod-editorial-001", async (route) => {
+    if (route.request().method() === "PATCH") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          id: "prod-editorial-001",
+          status: "approved",
+          updated_at: "2026-02-27T10:10:00Z",
+        }),
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "prod-editorial-001",
+        sku: "CAM-EDITORIAL-001",
+        nome_produto: "Camisa Editorial",
+        marca: "Lumen",
+        status: "generated",
+        score_qualidade: 88,
+        input_payload: {},
+        output_payload: {},
+        created_at: "2026-02-27T10:00:00Z",
+        updated_at: "2026-02-27T10:00:01Z",
+      }),
+    });
+  });
+
+  await page.goto("/produtos");
+  await page.locator("button.table-inline-button").first().click();
+  await page.getByRole("button", { name: "Aprovar" }).click();
+
+  await expect(page.getByText("Status atualizado: Aprovado.")).toBeVisible();
+  await expect(page.getByText("approved")).toBeVisible();
 });
 
 test("gerar: exibe erro de API quando criacao falha", async ({ page }) => {

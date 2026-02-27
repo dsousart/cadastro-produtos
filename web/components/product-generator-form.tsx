@@ -83,6 +83,7 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [responseStatus, setResponseStatus] = useState<number | null>(null);
   const [responseBody, setResponseBody] = useState<unknown | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const payloadPreview = useMemo(() => toPayload(form), [form]);
   const errorHint = useMemo(() => {
@@ -104,11 +105,13 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
     setIsSubmitting(true);
     setError(null);
     setResponseStatus(null);
+    setSuccessMessage(null);
 
     try {
       const body = await postJson<Record<string, unknown>, unknown>("/api/products", payloadPreview);
       setResponseStatus(201);
       setResponseBody(body);
+      setSuccessMessage("Produto criado com sucesso. Abrindo a tela de Produtos para revisao.");
       if (body && typeof body === "object") {
         const metadata =
           "metadata" in (body as Record<string, unknown>)
@@ -117,10 +120,7 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
         onCreated?.({
           productId:
             metadata && typeof metadata.product_id === "string" ? metadata.product_id : null,
-          sku:
-            "input_payload" in (body as Record<string, unknown>)
-              ? null
-              : payloadPreview.sku,
+          sku: payloadPreview.sku,
         });
       }
     } catch (submitError) {
@@ -276,6 +276,7 @@ export function ProductGeneratorForm({ onCreated }: ProductGeneratorFormProps) {
             {isSubmitting ? "Gerando..." : "Gerar produto"}
           </button>
           {responseStatus !== null ? <span>Status HTTP: {responseStatus}</span> : null}
+          {successMessage ? <span className="ok">{successMessage}</span> : null}
           {error ? <span className="warn">{error}</span> : null}
           {errorHint ? <span className="muted-inline">{errorHint}</span> : null}
         </div>

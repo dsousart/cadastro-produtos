@@ -3,14 +3,16 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { JsonViewer } from "./json-viewer";
-import { ApiClientError, getJson } from "../lib/api-client";
+import { ApiClientError, getJson, patchJson } from "../lib/api-client";
+
+type ProductStatus = "draft" | "in_review" | "generated" | "approved" | "rejected" | "published";
 
 type ProductRow = {
   id: string;
   sku: string;
   nome_produto: string;
   marca: string;
-  status: string;
+  status: ProductStatus;
   score_qualidade: number | null;
   created_at: string;
 };
@@ -29,7 +31,7 @@ type ProductDetail = {
   sku: string;
   nome_produto: string;
   marca: string;
-  status: string;
+  status: ProductStatus;
   score_qualidade: number | null;
   tenant_id?: string | null;
   generation_job_id?: string | null;
@@ -39,9 +41,16 @@ type ProductDetail = {
   updated_at: string;
 };
 
+type ProductStatusUpdateResponse = {
+  id: string;
+  status: ProductStatus;
+  updated_at: string;
+};
+
 type ProductsListPanelProps = {
   refreshSignal?: number;
   focusProductId?: string | null;
+  focusSku?: string | null;
   initialQuery?: {
     q?: string;
     status?: string;
@@ -53,10 +62,13 @@ type ProductsListPanelProps = {
   };
 };
 
-function getStatusBadgeClass(status: string) {
+function getStatusBadgeClass(status: ProductStatus) {
   const normalized = status.toLowerCase();
   if (normalized === "generated" || normalized === "completed") return "badge badge-ok";
+  if (normalized === "approved" || normalized === "published") return "badge badge-ok";
+  if (normalized === "in_review" || normalized === "draft") return "badge badge-warn";
   if (normalized === "failed" || normalized === "error") return "badge badge-danger";
+  if (normalized === "rejected") return "badge badge-danger";
   if (normalized === "pending" || normalized === "running") return "badge badge-warn";
   return "badge";
 }
@@ -71,6 +83,7 @@ function getScoreBadgeClass(score: number | null) {
 export function ProductsListPanel({
   refreshSignal = 0,
   focusProductId = null,
+  focusSku = null,
   initialQuery,
 }: ProductsListPanelProps) {
   const router = useRouter();
@@ -109,6 +122,8 @@ export function ProductsListPanel({
   const [detailError, setDetailError] = useState<string | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
+  const [statusActionLoading, setStatusActionLoading] = useState<ProductStatus | null>(null);
+  const [statusActionFeedback, setStatusActionFeedback] = useState<string | null>(null);
 
   const canPrev = offset > 0;
   const canNext = offset + limit < total;
@@ -179,6 +194,7 @@ export function ProductsListPanel({
     params.set("offset", String(offset));
     if (selectedProductId) params.set("focus", selectedProductId);
     else if (focusProductId) params.set("focus", focusProductId);
+    else if (focusSku) params.set("focus_sku", focusSku);
 
     const next = params.toString();
     const current = searchParams.toString();
@@ -186,6 +202,7 @@ export function ProductsListPanel({
       router.replace(next ? `${pathname}?${next}` : pathname, { scroll: false });
     }
   }, [
+    focusSku,
     focusProductId,
     limit,
     minScore,
@@ -222,6 +239,41 @@ export function ProductsListPanel({
     } catch {
       setShareFeedback("Falha ao copiar link da visao atual.");
       window.setTimeout(() => setShareFeedback(null), 1800);
+    }
+  }
+
+  async function applyEditorialStatus(nextStatus: "in_review" | "approved" | "rejected") {
+    if (!selectedProductId) return;
+    setStatusActionLoading(nextStatus);
+    setStatusActionFeedback(null);
+    try {
+      const result = await patchJson<{ status: "in_review" | "approved" | "rejected" }, ProductStatusUpdateResponse>(
+        `/api/products/${selectedProductId}`,
+        { status: nextStatus },
+      );
+      setItems((prev) =>
+        prev.map((item) => (item.id === result.id ? { ...item, status: result.status } : item)),
+      );
+      setSelectedProduct((prev) =>
+        prev && prev.id === result.id
+          ? { ...prev, status: result.status, updated_at: result.updated_at }
+          : prev,
+      );
+      const label =
+        nextStatus === "approved" ? "Aprovado" : nextStatus === "rejected" ? "Reprovado" : "Em revisao";
+      setStatusActionFeedback(`Status atualizado: ${label}.`);
+      window.setTimeout(() => setStatusActionFeedback(null), 1800);
+    } catch (err) {
+      if (err instanceof ApiClientError) {
+        setStatusActionFeedback(`Falha ao atualizar status: ${err.message}`);
+      } else {
+        setStatusActionFeedback(
+          `Falha ao atualizar status: ${err instanceof Error ? err.message : "Erro inesperado."}`,
+        );
+      }
+      window.setTimeout(() => setStatusActionFeedback(null), 2200);
+    } finally {
+      setStatusActionLoading(null);
     }
   }
 
@@ -343,6 +395,15 @@ export function ProductsListPanel({
     if (!focusProductId) return;
     void loadProductDetail(focusProductId);
   }, [focusProductId, loadProductDetail]);
+
+  useEffect(() => {
+    if (!focusSku || selectedProductId || items.length === 0) return;
+    const normalizedFocusSku = focusSku.trim().toLowerCase();
+    const matched = items.find((item) => item.sku.trim().toLowerCase() === normalizedFocusSku);
+    if (matched) {
+      void loadProductDetail(matched.id);
+    }
+  }, [focusSku, items, loadProductDetail, selectedProductId]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -609,52 +670,85 @@ export function ProductsListPanel({
           <p>Clique em uma linha para consultar `GET /api/v1/products/{'{id}'}`.</p>
         </div>
         {copyFeedback ? <p className="ok">{copyFeedback}</p> : null}
+        {statusActionFeedback ? (
+          <p className={statusActionFeedback.startsWith("Falha") ? "warn" : "ok"}>
+            {statusActionFeedback}
+          </p>
+        ) : null}
         {detailError ? <p className="warn">{detailError}</p> : null}
         {selectedProduct ? (
-          <div className="detail-summary-grid">
-            <div>
-              <span>ID</span>
-              <strong className="copy-value">
-                <code>{selectedProduct.id}</code>
-                <button
-                  type="button"
-                  className="copy-inline-button"
-                  onClick={() => void copyToClipboard("Product ID", selectedProduct.id)}
-                >
-                  Copiar
-                </button>
-              </strong>
+          <>
+            <div className="detail-summary-grid">
+              <div>
+                <span>ID</span>
+                <strong className="copy-value">
+                  <code>{selectedProduct.id}</code>
+                  <button
+                    type="button"
+                    className="copy-inline-button"
+                    onClick={() => void copyToClipboard("Product ID", selectedProduct.id)}
+                  >
+                    Copiar
+                  </button>
+                </strong>
+              </div>
+              <div>
+                <span>SKU</span>
+                <strong className="copy-value">
+                  <code>{selectedProduct.sku}</code>
+                  <button
+                    type="button"
+                    className="copy-inline-button"
+                    onClick={() => void copyToClipboard("SKU", selectedProduct.sku)}
+                  >
+                    Copiar
+                  </button>
+                </strong>
+              </div>
+              <div>
+                <span>Status</span>
+                <strong>
+                  <span className={getStatusBadgeClass(selectedProduct.status)}>
+                    {selectedProduct.status}
+                  </span>
+                </strong>
+              </div>
+              <div>
+                <span>Score</span>
+                <strong>
+                  <span className={getScoreBadgeClass(selectedProduct.score_qualidade)}>
+                    {selectedProduct.score_qualidade ?? "-"}
+                  </span>
+                </strong>
+              </div>
             </div>
-            <div>
-              <span>SKU</span>
-              <strong className="copy-value">
-                <code>{selectedProduct.sku}</code>
-                <button
-                  type="button"
-                  className="copy-inline-button"
-                  onClick={() => void copyToClipboard("SKU", selectedProduct.sku)}
-                >
-                  Copiar
-                </button>
-              </strong>
+            <div className="form-actions">
+              <button
+                type="button"
+                onClick={() => void applyEditorialStatus("approved")}
+                disabled={!!statusActionLoading}
+              >
+                {statusActionLoading === "approved" ? "Aprovando..." : "Aprovar"}
+              </button>
+              <button
+                type="button"
+                onClick={() => void applyEditorialStatus("rejected")}
+                disabled={!!statusActionLoading}
+              >
+                {statusActionLoading === "rejected" ? "Reprovando..." : "Reprovar"}
+              </button>
+              <button
+                type="button"
+                onClick={() => void applyEditorialStatus("in_review")}
+                disabled={!!statusActionLoading}
+              >
+                {statusActionLoading === "in_review" ? "Atualizando..." : "Marcar em revisao"}
+              </button>
+              <span className="muted-inline">
+                Ultima atualizacao: {new Date(selectedProduct.updated_at).toLocaleString("pt-BR")}
+              </span>
             </div>
-            <div>
-              <span>Status</span>
-              <strong>
-                <span className={getStatusBadgeClass(selectedProduct.status)}>
-                  {selectedProduct.status}
-                </span>
-              </strong>
-            </div>
-            <div>
-              <span>Score</span>
-              <strong>
-                <span className={getScoreBadgeClass(selectedProduct.score_qualidade)}>
-                  {selectedProduct.score_qualidade ?? "-"}
-                </span>
-              </strong>
-            </div>
-          </div>
+          </>
         ) : null}
         <JsonViewer
           title="Detalhe completo"

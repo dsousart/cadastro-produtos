@@ -13,6 +13,7 @@ type Wave2DashboardProps = {
   health: unknown;
   activeTab: DashboardTab;
   focusProductId?: string | null;
+  focusSku?: string | null;
   initialProductQuery?: {
     q?: string;
     status?: string;
@@ -30,6 +31,7 @@ export function Wave2Dashboard({
   health,
   activeTab,
   focusProductId = null,
+  focusSku = null,
   initialProductQuery,
 }: Wave2DashboardProps) {
   const router = useRouter();
@@ -122,8 +124,12 @@ export function Wave2Dashboard({
 
         {activeTab === "gerar" ? (
           <ProductGeneratorForm
-            onCreated={({ productId }) => {
-              const target = productId ? `/produtos?focus=${encodeURIComponent(productId)}` : "/produtos";
+            onCreated={({ productId, sku }) => {
+              const target = productId
+                ? `/produtos?focus=${encodeURIComponent(productId)}`
+                : sku
+                  ? `/produtos?q=${encodeURIComponent(sku)}&status=generated&focus_sku=${encodeURIComponent(sku)}`
+                  : "/produtos";
               router.push(target);
             }}
           />
@@ -133,6 +139,7 @@ export function Wave2Dashboard({
           <ProductsListPanel
             refreshSignal={0}
             focusProductId={focusProductId}
+            focusSku={focusSku}
             initialQuery={initialProductQuery}
           />
         ) : null}

@@ -33,6 +33,7 @@ export default async function ProdutosPage({ searchParams }: ProdutosPageProps) 
       health={health}
       activeTab="produtos"
       focusProductId={valueOf("focus") ?? null}
+      focusSku={valueOf("focus_sku") ?? null}
       initialProductQuery={initialProductQuery}
     />
   );
