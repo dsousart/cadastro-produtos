@@ -33,6 +33,7 @@
 - empty states guiados em `Produtos` e `Jobs` com CTA operacional
 - smoke E2E inicial com Playwright para `/produtos`, `/gerar` e `/jobs`
 - smoke E2E expandido para `/health` e validacao de query-state inicial em `/produtos`
+- smoke E2E expandido para caminhos de erro de API em `Produtos` e `Gerar`
 - CI de frontend (`.github/workflows/web-ci.yml`) com `lint`, `typecheck` e smoke E2E
 - configuracao inicial de env (`web/.env.example`)
 - `README` de bootstrap local

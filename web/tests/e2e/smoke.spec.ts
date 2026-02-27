@@ -97,3 +97,40 @@ test("jobs: cria job e completa polling", async ({ page }) => {
   await expect(page.getByText("Status atual:")).toBeVisible();
   await expect(page.getByText("completed")).toBeVisible();
 });
+
+test("produtos: exibe erro de API quando listagem falha", async ({ page }) => {
+  await page.route("**/api/products**", async (route) => {
+    await route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({
+        message: "Erro interno na listagem",
+      }),
+    });
+  });
+
+  await page.goto("/produtos");
+  await expect(page.getByText("Erro interno na listagem")).toBeVisible();
+});
+
+test("gerar: exibe erro de API quando criacao falha", async ({ page }) => {
+  await page.route("**/api/products", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({
+        message: "Erro ao criar produto",
+        error: "create_failed",
+      }),
+    });
+  });
+
+  await page.goto("/gerar");
+  await page.getByRole("button", { name: "Gerar produto" }).click();
+  await expect(page.locator(".form-actions .warn")).toHaveText("Erro ao criar produto");
+  await expect(page.getByText("Status HTTP: 500")).toBeVisible();
+});
