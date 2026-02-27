@@ -38,6 +38,7 @@ No projeto atual:
 - `docs/pr-wave1-sprint1-checklist.md`
 - `docs/pr-wave2-sprint2-checklist.md`
 - `docs/release-gate-checklist.md`
+- `docs/release-candidate-runbook.md`
 
 ## Stories
 

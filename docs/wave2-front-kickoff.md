@@ -46,6 +46,7 @@
 - CI de frontend expandida com `test:unit` antes do smoke E2E
 - CI de frontend com upload de artifacts Playwright em falha (`playwright-report`, `test-results`)
 - gate unica de release definida (`docs/release-gate-checklist.md` + workflow manual `release-gate.yml`)
+- workflow de Release Candidate com gate obrigatoria e criacao de release draft automatica
 - configuracao inicial de env (`web/.env.example`)
 - `README` de bootstrap local
 
