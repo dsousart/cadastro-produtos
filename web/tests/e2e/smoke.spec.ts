@@ -134,3 +134,26 @@ test("gerar: exibe erro de API quando criacao falha", async ({ page }) => {
   await expect(page.locator(".form-actions .warn")).toHaveText("Erro ao criar produto");
   await expect(page.getByText("Status HTTP: 500")).toBeVisible();
 });
+
+test("produtos: exibe erro quando backend esta indisponivel", async ({ page }) => {
+  await page.route("**/api/products**", async (route) => {
+    await route.abort("failed");
+  });
+
+  await page.goto("/produtos");
+  await expect(page.getByText("Failed to fetch")).toBeVisible();
+});
+
+test("gerar: exibe erro quando backend esta indisponivel", async ({ page }) => {
+  await page.route("**/api/products", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.abort("failed");
+  });
+
+  await page.goto("/gerar");
+  await page.getByRole("button", { name: "Gerar produto" }).click();
+  await expect(page.locator(".form-actions .warn")).toHaveText("Failed to fetch");
+});
