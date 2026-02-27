@@ -5,6 +5,8 @@ from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
+ProductStatus = Literal["draft", "in_review", "generated", "approved", "rejected", "published"]
+
 
 class PromocaoInput(BaseModel):
     preco_promocional: float = Field(..., gt=0)
@@ -189,7 +191,7 @@ class ProductRecordListItem(BaseModel):
     sku: str
     nome_produto: str
     marca: str
-    status: str
+    status: ProductStatus
     score_qualidade: Optional[int] = None
     created_at: datetime
     updated_at: datetime
@@ -213,9 +215,19 @@ class ProductRecordDetail(BaseModel):
     sku: str
     nome_produto: str
     marca: str
-    status: str
+    status: ProductStatus
     score_qualidade: Optional[int] = None
     input_payload: Dict[str, Any]
     output_payload: Optional[Dict[str, Any]] = None
     created_at: datetime
+    updated_at: datetime
+
+
+class ProductStatusUpdateRequest(BaseModel):
+    status: Literal["in_review", "approved", "rejected"]
+
+
+class ProductStatusUpdateResponse(BaseModel):
+    id: str
+    status: ProductStatus
     updated_at: datetime

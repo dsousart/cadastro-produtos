@@ -33,6 +33,7 @@ def test_create_product_stateless(client_no_db, example_input):
 def test_list_and_jobs_require_db_when_not_configured(client_no_db):
     assert client_no_db.get("/api/v1/products").status_code == 503
     assert client_no_db.post("/api/v1/generation-jobs", json={"items": []}).status_code == 422
+    assert client_no_db.patch("/api/v1/products/any-id", json={"status": "approved"}).status_code == 503
 
 
 def test_db_flow_products_and_generation_jobs(client_db, example_input):
@@ -69,6 +70,16 @@ def test_db_flow_products_and_generation_jobs(client_db, example_input):
     assert detail_resp.status_code == 200, detail_resp.text
     detail = detail_resp.json()
     assert detail["sku"] == payload["sku"]
+
+    patch_resp = client_db.patch(f"/api/v1/products/{product_id}", json={"status": "in_review"})
+    assert patch_resp.status_code == 200, patch_resp.text
+    patched = patch_resp.json()
+    assert patched["id"] == product_id
+    assert patched["status"] == "in_review"
+
+    detail_after_patch = client_db.get(f"/api/v1/products/{product_id}")
+    assert detail_after_patch.status_code == 200, detail_after_patch.text
+    assert detail_after_patch.json()["status"] == "in_review"
 
     job_payload = dict(example_input)
     job_payload["sku"] = f"{example_input['sku']}-JOB-{uuid4().hex[:8]}"

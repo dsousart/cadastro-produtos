@@ -20,7 +20,15 @@ class Product(Base, IdMixin, TimestampMixin):
     nome_produto: Mapped[str] = mapped_column(String(255))
     marca: Mapped[str] = mapped_column(String(255))
     status: Mapped[str] = mapped_column(
-        Enum("draft", "generated", "approved", "published", name="product_status"),
+        Enum(
+            "draft",
+            "in_review",
+            "generated",
+            "approved",
+            "rejected",
+            "published",
+            name="product_status",
+        ),
         default="draft",
         index=True,
     )

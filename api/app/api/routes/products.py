@@ -9,6 +9,8 @@ from ...schemas import (
     ProductListResponse,
     ProductRecordDetail,
     ProductRecordListItem,
+    ProductStatusUpdateRequest,
+    ProductStatusUpdateResponse,
 )
 from ...services.pipeline_service import (
     build_create_product_response,
@@ -18,6 +20,7 @@ from ...services.product_persistence_service import (
     create_product_record,
     get_product_by_id,
     list_products,
+    update_product_status,
 )
 
 
@@ -145,3 +148,22 @@ def get_product_detail(product_id: str) -> ProductRecordDetail:
             created_at=item.created_at,
             updated_at=item.updated_at,
         )
+
+
+@router.patch("/{product_id}", response_model=ProductStatusUpdateResponse)
+def patch_product_status(product_id: str, payload: ProductStatusUpdateRequest) -> ProductStatusUpdateResponse:
+    with session_scope_optional() as db:
+        if db is None:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Database nao configurado para atualizar produto.",
+            )
+
+        item = update_product_status(db, product_id=product_id, status=payload.status)
+        if item is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Produto nao encontrado.",
+            )
+
+        return ProductStatusUpdateResponse(id=item.id, status=item.status, updated_at=item.updated_at)

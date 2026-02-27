@@ -11,6 +11,8 @@ from .product import (
     ProductOutput,
     ProductRecordDetail,
     ProductRecordListItem,
+    ProductStatusUpdateRequest,
+    ProductStatusUpdateResponse,
 )
 
 __all__ = [
@@ -24,4 +26,6 @@ __all__ = [
     "ProductRecordDetail",
     "PaginationMeta",
     "ProductListResponse",
+    "ProductStatusUpdateRequest",
+    "ProductStatusUpdateResponse",
 ]

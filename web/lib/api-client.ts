@@ -67,3 +67,14 @@ export async function postJson<TRequest, TResponse>(
     body: JSON.stringify(payload),
   });
 }
+
+export async function patchJson<TRequest, TResponse>(
+  url: string,
+  payload: TRequest,
+): Promise<TResponse> {
+  return requestJson<TResponse>(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
