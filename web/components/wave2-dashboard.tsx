@@ -72,12 +72,12 @@ export function Wave2Dashboard({
   return (
     <>
       <section className="panel">
-        <h2>Proximos blocos da Wave 2</h2>
+        <h2>Como usar este workspace</h2>
         <ul>
-          <li>Formulario de geracao (`POST /api/v1/products`) - base implementada</li>
-          <li>Tabela paginada de produtos (`GET /api/v1/products`) - base implementada</li>
-          <li>Painel de jobs (`generation-jobs` + polling de status) - base implementada</li>
-          <li>Estados de erro/loading e observabilidade basica de UX</li>
+          <li>Use <strong>Gerar</strong> para criar novos produtos.</li>
+          <li>Use <strong>Jobs</strong> para acompanhar processamento em lote.</li>
+          <li>Use <strong>Produtos</strong> para revisar resultado, score e detalhes.</li>
+          <li>Use <strong>Health</strong> para diagnosticar ambiente local (API/banco).</li>
         </ul>
       </section>
 
