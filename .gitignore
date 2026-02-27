@@ -26,6 +26,7 @@ web/playwright-report/
 *.tsbuildinfo
 
 # Large generated/local data
+cadastro/
 bk_extracted/
 bk_extracted_reprocess_*/
 raw_concorrentes/
