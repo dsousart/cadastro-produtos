@@ -1,7 +1,7 @@
 # Wave 2 - Frontend Kickoff (Estado Parcial)
 
 **Data:** 2026-02-26  
-**Status:** Base funcional da Wave 2 implementada (frontend + proxies + fluxos principais)
+**Status:** Sprint 2 concluida (UX operacional + smoke E2E + CI frontend)
 
 ## Entregas desta etapa
 
@@ -51,13 +51,12 @@
 - `npm run typecheck` (TypeScript) OK
 - API local (`uvicorn`) integrada aos proxies Next
 
-## Objetivo do proximo ciclo (Wave 2)
+## Objetivo do proximo ciclo (Sprint 3)
 
-1. Refinar UX de operacao (empty states, loading states, mensagens de erro/sucesso)
-2. Melhorar painel de `generation-jobs` (UX de lote e estados operacionais)
-3. Extrair tipos/cliente API compartilhado (`web/lib/api-client.ts`)
-4. Adicionar testes de UI (minimo smoke) e/ou E2E inicial (Playwright, quando priorizado)
-5. Evoluir navegacao/layout (tabs/rotas) para reduzir rolagem na operacao
+1. Cobrir fluxo ponta a ponta `Gerar -> Jobs -> Produtos (focus)` em E2E
+2. Adicionar testes de integracao de componentes no frontend
+3. Publicar artifacts Playwright no CI em caso de falha (trace/video/screenshot)
+4. Definir gate de release com checklist operacional unica
 
 ## Backlog UI sugerido (curto prazo)
 

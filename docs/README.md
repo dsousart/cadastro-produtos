@@ -32,9 +32,11 @@ No projeto atual:
 - `docs/architecture-progress.md`
 - `docs/roadmap-proximos-passos.md`
 - `docs/sprint-1-execution-report.md`
+- `docs/sprint-2-execution-report.md`
 - `docs/wave1-backlog-tecnico.md`
 - `docs/wave2-front-kickoff.md`
 - `docs/pr-wave1-sprint1-checklist.md`
+- `docs/pr-wave2-sprint2-checklist.md`
 
 ## Stories
 
