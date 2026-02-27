@@ -47,3 +47,4 @@ Observacoes:
 - UI runner: `npm run test:ui`
 - Unit tests: `npm run test:unit`
 - Rodar um arquivo: `npx playwright test tests/e2e/smoke.spec.ts`
+- Gate completo de release (web): `npm run release:check`

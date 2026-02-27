@@ -45,6 +45,7 @@
 - camada inicial de testes de componentes (Vitest + Testing Library)
 - CI de frontend expandida com `test:unit` antes do smoke E2E
 - CI de frontend com upload de artifacts Playwright em falha (`playwright-report`, `test-results`)
+- gate unica de release definida (`docs/release-gate-checklist.md` + workflow manual `release-gate.yml`)
 - configuracao inicial de env (`web/.env.example`)
 - `README` de bootstrap local
 

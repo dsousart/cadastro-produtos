@@ -37,6 +37,7 @@ No projeto atual:
 - `docs/wave2-front-kickoff.md`
 - `docs/pr-wave1-sprint1-checklist.md`
 - `docs/pr-wave2-sprint2-checklist.md`
+- `docs/release-gate-checklist.md`
 
 ## Stories
 
