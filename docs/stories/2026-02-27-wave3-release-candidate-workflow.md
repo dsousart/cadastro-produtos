@@ -14,6 +14,7 @@
 - [x] Workflow `release-candidate.yml` criada
 - [x] Input de `tag` e `target` adicionados no `workflow_dispatch`
 - [x] Gate API e Web incorporadas antes de publicar RC
+- [x] Fail-fast para tag existente no remoto
 - [x] Criacao de tag automatizada no fim do fluxo
 - [x] Criacao de draft release automatica no fim do fluxo
 - [x] Runbook de operacao documentado

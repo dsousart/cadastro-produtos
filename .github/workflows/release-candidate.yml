@@ -110,6 +110,13 @@ jobs:
           ref: ${{ inputs.target }}
           fetch-depth: 0
 
+      - name: Guard - fail if tag already exists
+        run: |
+          if git ls-remote --tags origin "refs/tags/${{ inputs.tag }}" | grep -q "${{ inputs.tag }}"; then
+            echo "Tag '${{ inputs.tag }}' already exists on origin."
+            exit 1
+          fi
+
       - name: Create tag
         run: |
           git config user.name "github-actions[bot]"

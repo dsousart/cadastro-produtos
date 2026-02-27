@@ -29,6 +29,10 @@ Fluxo recomendado para gerar RC com gate de qualidade obrigatoria.
    - cria tag no repo
    - cria release draft com release notes automaticas
 
+## Regras de seguranca
+
+- O workflow falha automaticamente se a tag informada ja existir no remoto.
+
 ## Politica
 
 - Nao criar tag manual de RC fora deste workflow.
