@@ -40,6 +40,7 @@
 - smoke E2E expandido para caminhos de erro de API em `Produtos` e `Gerar`
 - smoke E2E expandido para indisponibilidade de backend (falha de rede) em `Produtos` e `Gerar`
 - smoke E2E expandido para caminhos de falha de polling em `Jobs` (erro 500 e rede)
+- fluxo E2E ponta a ponta `Gerar -> Jobs -> Produtos (focus)` coberto em smoke
 - CI de frontend (`.github/workflows/web-ci.yml`) com `lint`, `typecheck` e smoke E2E
 - configuracao inicial de env (`web/.env.example`)
 - `README` de bootstrap local

@@ -153,6 +153,116 @@ test("produtos: presets de link aplicam filtros esperados", async ({ page }) => 
   await expect(page).toHaveURL(/\/produtos\?(?=.*status=generated)(?=.*min_score=85)/);
 });
 
+test("e2e: gerar -> jobs -> produtos com focus atualizado", async ({ page }) => {
+  await page.route("**/api/products", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        metadata: { product_id: "prod-from-gerar-001" },
+      }),
+    });
+  });
+
+  await page.route("**/api/generation-jobs", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    await route.fulfill({
+      status: 202,
+      contentType: "application/json",
+      body: JSON.stringify({
+        job_id: "job-e2e-flow-001",
+        status: "pending",
+        total_items: 1,
+        message: "accepted",
+      }),
+    });
+  });
+
+  await page.route("**/api/generation-jobs/job-e2e-flow-001", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "job-e2e-flow-001",
+        status: "completed",
+        total_items: 1,
+        completed_items: 1,
+        failed_items: 0,
+        results: [{ index: 0, sku: "CAM-E2E-001", status: "completed", product_id: "prod-from-job-001" }],
+      }),
+    });
+  });
+
+  await page.route("**/api/products?**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [
+          {
+            id: "prod-from-gerar-001",
+            sku: "CAM-GERAR-001",
+            nome_produto: "Camisa Gerar",
+            marca: "Lumen",
+            status: "generated",
+            score_qualidade: 88,
+            created_at: "2026-02-27T10:00:00Z",
+          },
+          {
+            id: "prod-from-job-001",
+            sku: "CAM-JOB-001",
+            nome_produto: "Camisa Job",
+            marca: "Lumen",
+            status: "generated",
+            score_qualidade: 91,
+            created_at: "2026-02-27T10:05:00Z",
+          },
+        ],
+        pagination: { total: 2, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.route("**/api/products/*", async (route) => {
+    const url = new URL(route.request().url());
+    const productId = url.pathname.split("/").pop() ?? "unknown";
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: productId,
+        sku: productId === "prod-from-job-001" ? "CAM-JOB-001" : "CAM-GERAR-001",
+        nome_produto: productId === "prod-from-job-001" ? "Camisa Job" : "Camisa Gerar",
+        marca: "Lumen",
+        status: "generated",
+        score_qualidade: productId === "prod-from-job-001" ? 91 : 88,
+        input_payload: {},
+        output_payload: {},
+        created_at: "2026-02-27T10:00:00Z",
+        updated_at: "2026-02-27T10:06:00Z",
+      }),
+    });
+  });
+
+  await page.goto("/gerar");
+  await page.getByRole("button", { name: "Gerar produto" }).click();
+  await expect(page).toHaveURL(/\/produtos\?(?=.*focus=prod-from-gerar-001)/);
+
+  await page.getByRole("tab", { name: "Jobs" }).click();
+  await expect(page).toHaveURL(/\/jobs$/);
+  await page.getByRole("button", { name: "Criar generation-job" }).first().click();
+
+  await expect(page).toHaveURL(/\/produtos\?(?=.*focus=prod-from-job-001)/);
+  await expect(page.locator(".detail-summary-grid code").first()).toHaveText("prod-from-job-001");
+});
+
 test("jobs: cria job e completa polling", async ({ page }) => {
   let pollCount = 0;
 
