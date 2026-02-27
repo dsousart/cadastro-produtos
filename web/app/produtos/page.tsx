@@ -12,9 +12,10 @@ export default async function ProdutosPage({ searchParams }: ProdutosPageProps) 
     const value = params?.[key];
     return Array.isArray(value) ? value[0] : value;
   };
-  const toInt = (value: string | undefined, fallback: number) => {
+  const toInt = (value: string | undefined) => {
+    if (typeof value !== "string") return undefined;
     const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : fallback;
+    return Number.isFinite(parsed) ? parsed : undefined;
   };
 
   const initialProductQuery = {
@@ -23,8 +24,8 @@ export default async function ProdutosPage({ searchParams }: ProdutosPageProps) 
     min_score: valueOf("min_score"),
     sort_by: valueOf("sort_by") as "created_at" | "score_qualidade" | "sku" | "nome_produto" | undefined,
     sort_dir: valueOf("sort_dir") as "asc" | "desc" | undefined,
-    limit: toInt(valueOf("limit"), 10),
-    offset: toInt(valueOf("offset"), 0),
+    limit: toInt(valueOf("limit")),
+    offset: toInt(valueOf("offset")),
   };
 
   return (

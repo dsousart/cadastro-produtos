@@ -27,6 +27,7 @@
 - navegacao por tabs no dashboard (`Gerar`, `Produtos`, `Jobs`, `Health`) com persistencia da tab ativa
 - rotas reais por URL para operacao (`/gerar`, `/produtos`, `/jobs`, `/health`) com tabs mantendo navegacao
 - deep-linking de filtros/ordenacao da listagem via query params em `/produtos` (`q`, `status`, `min_score`, `sort`, `limit`, `offset`, `focus`)
+- parse de query em `/produtos` ajustado para nao forcar `limit`/`offset` quando ausentes
 - acao de copiar link da visao atual em `/produtos` (compartilhamento rapido de filtros)
 - presets de links operacionais em `/produtos` (`Revisao editorial`, `Aprovados`, `Score alto`)
 - acao de resetar visao em `/produtos` (limpa query params e estado da listagem)
