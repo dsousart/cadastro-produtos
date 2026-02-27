@@ -40,6 +40,7 @@ No projeto atual:
 - `docs/release-gate-checklist.md`
 - `docs/release-candidate-runbook.md`
 - `docs/release-final-runbook.md`
+- `docs/release-governance.md`
 
 ## Stories
 
