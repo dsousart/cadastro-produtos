@@ -143,6 +143,8 @@ def get_product_detail(product_id: str) -> ProductRecordDetail:
             marca=item.marca,
             status=item.status,
             score_qualidade=item.score_qualidade,
+            status_updated_by=item.status_updated_by,
+            status_updated_at=item.status_updated_at,
             input_payload=item.input_payload,
             output_payload=item.output_payload,
             created_at=item.created_at,
@@ -159,11 +161,22 @@ def patch_product_status(product_id: str, payload: ProductStatusUpdateRequest) -
                 detail="Database nao configurado para atualizar produto.",
             )
 
-        item = update_product_status(db, product_id=product_id, status=payload.status)
+        item = update_product_status(
+            db,
+            product_id=product_id,
+            status=payload.status,
+            changed_by=payload.changed_by,
+        )
         if item is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Produto nao encontrado.",
             )
 
-        return ProductStatusUpdateResponse(id=item.id, status=item.status, updated_at=item.updated_at)
+        return ProductStatusUpdateResponse(
+            id=item.id,
+            status=item.status,
+            status_updated_by=item.status_updated_by,
+            status_updated_at=item.status_updated_at,
+            updated_at=item.updated_at,
+        )

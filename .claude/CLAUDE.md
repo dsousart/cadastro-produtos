@@ -1,293 +1,356 @@
-# CLAUDE.md
+# Synkra AIOS Development Rules for Claude Code
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+You are working with Synkra AIOS, an AI-Orchestrated System for Full Stack Development.
 
----
+<!-- AIOS-MANAGED-START: core-framework -->
+## Core Framework Understanding
 
-# Cadastro de Produtos Premium - Moda Masculina 30+
+Synkra AIOS is a meta-framework that orchestrates AI agents to handle complex development workflows. Always recognize and work within this architecture.
+<!-- AIOS-MANAGED-END: core-framework -->
 
-Este é um projeto Python que automatiza o cadastro premium de produtos de moda masculina para público 30+, garantindo consistência de marca, padronização de atributos e qualidade editorial com auditoria rastreável.
+<!-- AIOS-MANAGED-START: constitution -->
+## Constitution
 
-## Arquitetura do Sistema
+O AIOS possui uma **Constitution formal** com princípios inegociáveis e gates automáticos.
 
-### Pipeline de Processamento
+**Documento completo:** `.aios-core/constitution.md`
 
-O sistema segue um pipeline de 7 etapas principais:
+**Princípios fundamentais:**
 
-1. **Ingestão** → Valida campos obrigatórios e tipos
-2. **Normalização** → Padroniza tamanhos, cores e composição
-3. **Enriquecimento** → Sugere atributos derivados
-4. **Copy Premium** → Gera título, subtítulo, descrição e bullets
-5. **Revisão** → Valida diretrizes da marca
-6. **SEO** → Gera meta title, description e slug
-7. **Score e Auditoria** → Calcula score de qualidade (0-100)
+| Artigo | Princípio | Severidade |
+|--------|-----------|------------|
+| I | CLI First | NON-NEGOTIABLE |
+| II | Agent Authority | NON-NEGOTIABLE |
+| III | Story-Driven Development | MUST |
+| IV | No Invention | MUST |
+| V | Quality First | MUST |
+| VI | Absolute Imports | SHOULD |
 
-### Estrutura de Diretórios
+**Gates automáticos bloqueiam violações.** Consulte a Constitution para detalhes completos.
+<!-- AIOS-MANAGED-END: constitution -->
+
+<!-- AIOS-MANAGED-START: sistema-de-agentes -->
+## Sistema de Agentes
+
+### Ativação de Agentes
+Use `@agent-name` ou `/AIOS:agents:agent-name`:
+
+| Agente | Persona | Escopo Principal |
+|--------|---------|------------------|
+| `@dev` | Dex | Implementação de código |
+| `@qa` | Quinn | Testes e qualidade |
+| `@architect` | Aria | Arquitetura e design técnico |
+| `@pm` | Morgan | Product Management |
+| `@po` | Pax | Product Owner, stories/epics |
+| `@sm` | River | Scrum Master |
+| `@analyst` | Alex | Pesquisa e análise |
+| `@data-engineer` | Dara | Database design |
+| `@ux-design-expert` | Uma | UX/UI design |
+| `@devops` | Gage | CI/CD, git push (EXCLUSIVO) |
+
+### Comandos de Agentes
+Use prefixo `*` para comandos:
+- `*help` - Mostrar comandos disponíveis
+- `*create-story` - Criar story de desenvolvimento
+- `*task {name}` - Executar task específica
+- `*exit` - Sair do modo agente
+<!-- AIOS-MANAGED-END: sistema-de-agentes -->
+
+<!-- AIOS-MANAGED-START: agent-system -->
+## Agent System
+
+### Agent Activation
+- Agents are activated with @agent-name syntax: @dev, @qa, @architect, @pm, @po, @sm, @analyst
+- The master agent is activated with @aios-master
+- Agent commands use the * prefix: *help, *create-story, *task, *exit
+
+### Agent Context
+When an agent is active:
+- Follow that agent's specific persona and expertise
+- Use the agent's designated workflow patterns
+- Maintain the agent's perspective throughout the interaction
+<!-- AIOS-MANAGED-END: agent-system -->
+
+## Development Methodology
+
+### Story-Driven Development
+1. **Work from stories** - All development starts with a story in `docs/stories/`
+2. **Update progress** - Mark checkboxes as tasks complete: [ ] → [x]
+3. **Track changes** - Maintain the File List section in the story
+4. **Follow criteria** - Implement exactly what the acceptance criteria specify
+
+### Code Standards
+- Write clean, self-documenting code
+- Follow existing patterns in the codebase
+- Include comprehensive error handling
+- Add unit tests for all new functionality
+- Use TypeScript/JavaScript best practices
+
+### Testing Requirements
+- Run all tests before marking tasks complete
+- Ensure linting passes: `npm run lint`
+- Verify type checking: `npm run typecheck`
+- Add tests for new features
+- Test edge cases and error scenarios
+
+<!-- AIOS-MANAGED-START: framework-structure -->
+## AIOS Framework Structure
 
 ```
-.
-├── core/                    # Módulos principais do pipeline
-│   ├── generator.py         # Geração de conteúdo premium
-│   ├── auditor.py          # Auditoria e validação
-│   ├── refiner.py          # Refinamento iterativo
-│   ├── bk_reader.py        # Leitor de base de conhecimento
-│   ├── bk_validator.py     # Validação de BK
-│   ├── extract_raw.py      # Extração de conteúdo bruto
-│   └── normalize_to_markdown.py  # Normalização para markdown
-│
-├── pipeline/               # Orquestração do pipeline
-│   ├── pipeline.py         # Pipeline principal
-│   ├── run.py             # Runner CLI
-│   ├── bk_ingest.py       # Ingestão de BK
-│   ├── bk_scraper.py      # Scraper de concorrentes
-│   └── bk_validate.py     # Validação de BK
-│
-├── base_conhecimento/      # Base de conhecimento (marca, categoria, etc)
-├── bk_extracted/          # Dados extraídos de concorrentes
-├── raw_concorrentes/      # HTMLs brutos de scraping
-├── docs/                  # Documentação e stories
-│   └── stories/           # Stories de desenvolvimento
-└── .aios-core/            # Framework Synkra AIOS
+aios-core/
+├── agents/         # Agent persona definitions (YAML/Markdown)
+├── tasks/          # Executable task workflows
+├── workflows/      # Multi-step workflow definitions
+├── templates/      # Document and code templates
+├── checklists/     # Validation and review checklists
+└── rules/          # Framework rules and patterns
+
+docs/
+├── stories/        # Development stories (numbered)
+├── prd/            # Product requirement documents
+├── architecture/   # System architecture documentation
+└── guides/         # User and developer guides
 ```
+<!-- AIOS-MANAGED-END: framework-structure -->
 
-## Comandos Principais
+<!-- AIOS-MANAGED-START: framework-boundary -->
+## Framework vs Project Boundary
 
-### Pipeline de Cadastro
+O AIOS usa um modelo de 4 camadas (L1-L4) para separar artefatos do framework e do projeto. Deny rules em `.claude/settings.json` reforçam isso deterministicamente.
+
+| Camada | Mutabilidade | Paths | Notas |
+|--------|-------------|-------|-------|
+| **L1** Framework Core | NEVER modify | `.aios-core/core/`, `.aios-core/constitution.md`, `bin/aios.js`, `bin/aios-init.js` | Protegido por deny rules |
+| **L2** Framework Templates | NEVER modify | `.aios-core/development/tasks/`, `.aios-core/development/templates/`, `.aios-core/development/checklists/`, `.aios-core/development/workflows/`, `.aios-core/infrastructure/` | Extend-only |
+| **L3** Project Config | Mutable (exceptions) | `.aios-core/data/`, `agents/*/MEMORY.md`, `core-config.yaml` | Allow rules permitem |
+| **L4** Project Runtime | ALWAYS modify | `docs/stories/`, `packages/`, `squads/`, `tests/` | Trabalho do projeto |
+
+**Toggle:** `core-config.yaml` → `boundary.frameworkProtection: true/false` controla se deny rules são ativas (default: true para projetos, false para contribuidores do framework).
+
+> **Referência formal:** `.claude/settings.json` (deny/allow rules), `.claude/rules/agent-authority.md`
+<!-- AIOS-MANAGED-END: framework-boundary -->
+
+<!-- AIOS-MANAGED-START: rules-system -->
+## Rules System
+
+O AIOS carrega regras contextuais de `.claude/rules/` automaticamente. Regras com frontmatter `paths:` só carregam quando arquivos correspondentes são editados.
+
+| Rule File | Description |
+|-----------|-------------|
+| `agent-authority.md` | Agent delegation matrix and exclusive operations |
+| `agent-handoff.md` | Agent switch compaction protocol for context optimization |
+| `agent-memory-imports.md` | Agent memory lifecycle and CLAUDE.md ownership |
+| `coderabbit-integration.md` | Automated code review integration rules |
+| `ids-principles.md` | Incremental Development System principles |
+| `mcp-usage.md` | MCP server usage rules and tool selection priority |
+| `story-lifecycle.md` | Story status transitions and quality gates |
+| `workflow-execution.md` | 4 primary workflows (SDC, QA Loop, Spec Pipeline, Brownfield) |
+
+> **Diretório:** `.claude/rules/` — rules são carregadas automaticamente pelo Claude Code quando relevantes.
+<!-- AIOS-MANAGED-END: rules-system -->
+
+<!-- AIOS-MANAGED-START: code-intelligence -->
+## Code Intelligence
+
+O AIOS possui um sistema de code intelligence opcional que enriquece operações com dados de análise de código.
+
+| Status | Descrição | Comportamento |
+|--------|-----------|---------------|
+| **Configured** | Provider ativo e funcional | Enrichment completo disponível |
+| **Fallback** | Provider indisponível | Sistema opera normalmente sem enrichment — graceful degradation |
+| **Disabled** | Nenhum provider configurado | Funcionalidade de code-intel ignorada silenciosamente |
+
+**Graceful Fallback:** Code intelligence é sempre opcional. `isCodeIntelAvailable()` verifica disponibilidade antes de qualquer operação. Se indisponível, o sistema retorna o resultado base sem modificação — nunca falha.
+
+**Diagnóstico:** `aios doctor` inclui check de code-intel provider status.
+
+> **Referência:** `.aios-core/core/code-intel/` — provider interface, enricher, client
+<!-- AIOS-MANAGED-END: code-intelligence -->
+
+<!-- AIOS-MANAGED-START: graph-dashboard -->
+## Graph Dashboard
+
+O CLI `aios graph` visualiza dependências, estatísticas de entidades e status de providers.
+
+### Comandos
 
 ```bash
-# Executar pipeline completo (geração + auditoria + refinamento)
-python pipeline/run.py --input examples-input.json --out output.json
-
-# Especificar caminho da base de conhecimento
-python pipeline/run.py --input produto.json --out output.json --bk ./base_conhecimento
-
-# Limitar iterações de refinamento (padrão: 2)
-python pipeline/run.py --input produto.json --out output.json --max-iterations 3
+aios graph --deps                        # Dependency tree (ASCII)
+aios graph --deps --format=json          # Output como JSON
+aios graph --deps --format=html          # Interactive HTML (abre browser)
+aios graph --deps --format=mermaid       # Mermaid diagram
+aios graph --deps --format=dot           # DOT format (Graphviz)
+aios graph --deps --watch                # Live mode com auto-refresh
+aios graph --deps --watch --interval=10  # Refresh a cada 10 segundos
+aios graph --stats                       # Entity stats e cache metrics
 ```
 
-### Pipeline Alternativo (sem refinamento)
+**Formatos de saída:** ascii (default), json, dot, mermaid, html
 
+> **Referência:** `.aios-core/core/graph-dashboard/` — CLI, renderers, data sources
+<!-- AIOS-MANAGED-END: graph-dashboard -->
+
+## Workflow Execution
+
+### Task Execution Pattern
+1. Read the complete task/workflow definition
+2. Understand all elicitation points
+3. Execute steps sequentially
+4. Handle errors gracefully
+5. Provide clear feedback
+
+### Interactive Workflows
+- Workflows with `elicit: true` require user input
+- Present options clearly
+- Validate user responses
+- Provide helpful defaults
+
+## Best Practices
+
+### When implementing features:
+- Check existing patterns first
+- Reuse components and utilities
+- Follow naming conventions
+- Keep functions focused and testable
+- Document complex logic
+
+### When working with agents:
+- Respect agent boundaries
+- Use appropriate agent for each task
+- Follow agent communication patterns
+- Maintain agent context
+
+### When handling errors:
+```javascript
+try {
+  // Operation
+} catch (error) {
+  console.error(`Error in ${operation}:`, error);
+  // Provide helpful error message
+  throw new Error(`Failed to ${operation}: ${error.message}`);
+}
+```
+
+## Git & GitHub Integration
+
+### Commit Conventions
+- Use conventional commits: `feat:`, `fix:`, `docs:`, `chore:`, etc.
+- Reference story ID: `feat: implement IDE detection [Story 2.1]`
+- Keep commits atomic and focused
+
+### GitHub CLI Usage
+- Ensure authenticated: `gh auth status`
+- Use for PR creation: `gh pr create`
+- Check org access: `gh api user/memberships`
+
+<!-- AIOS-MANAGED-START: aios-patterns -->
+## AIOS-Specific Patterns
+
+### Working with Templates
+```javascript
+const template = await loadTemplate('template-name');
+const rendered = await renderTemplate(template, context);
+```
+
+### Agent Command Handling
+```javascript
+if (command.startsWith('*')) {
+  const agentCommand = command.substring(1);
+  await executeAgentCommand(agentCommand, args);
+}
+```
+
+### Story Updates
+```javascript
+// Update story progress
+const story = await loadStory(storyId);
+story.updateTask(taskId, { status: 'completed' });
+await story.save();
+```
+<!-- AIOS-MANAGED-END: aios-patterns -->
+
+## Environment Setup
+
+### Required Tools
+- Node.js 18+
+- GitHub CLI
+- Git
+- Your preferred package manager (npm/yarn/pnpm)
+
+### Configuration Files
+- `.aios/config.yaml` - Framework configuration
+- `.env` - Environment variables
+- `aios.config.js` - Project-specific settings
+
+<!-- AIOS-MANAGED-START: common-commands -->
+## Common Commands
+
+### AIOS Master Commands
+- `*help` - Show available commands
+- `*create-story` - Create new story
+- `*task {name}` - Execute specific task
+- `*workflow {name}` - Run workflow
+
+### Development Commands
+- `npm run dev` - Start development
+- `npm test` - Run tests
+- `npm run lint` - Check code style
+- `npm run build` - Build project
+<!-- AIOS-MANAGED-END: common-commands -->
+
+## Debugging
+
+### Enable Debug Mode
 ```bash
-# Executar apenas geração e auditoria
-python pipeline/pipeline.py --input produto.json --output resultado.json
+export AIOS_DEBUG=true
 ```
 
-### Base de Conhecimento
-
+### View Agent Logs
 ```bash
-# Scraping de concorrentes (com browser headless)
-python pipeline/bk_scraper.py --sources docs/scraper-sources.txt --output raw_concorrentes/
-
-# Extrair conteúdo dos HTMLs brutos para markdown
-python core/extract_raw.py --input raw_concorrentes/ --output bk_extracted/
-
-# Normalizar markdown extraído
-python core/normalize_to_markdown.py --input bk_extracted/ --output base_conhecimento/
-
-# Ingestão completa de BK (scraping + extração + normalização)
-python pipeline/bk_ingest.py --sources docs/scraper-sources.txt --output base_conhecimento/
-
-# Validar qualidade da base de conhecimento
-python pipeline/bk_validate.py --bk-dir base_conhecimento/
+tail -f .aios/logs/agent.log
 ```
 
-## Especificação do Produto (SPEC.md)
-
-O arquivo `SPEC.md` define as regras de entrada, saída e validação:
-
-### Entradas Obrigatórias
-- `sku`, `nome_produto`, `descricao_bruta`, `marca`, `categoria`
-- `tamanhos`, `cores`, `preco`, `imagens`
-- `guidelines_marca`, `regras_categoria`, `restricoes_legais`
-
-### Saídas Geradas
-- **Conteúdo**: `titulo`, `subtitulo`, `descricao`, `bullet_points`
-- **Estrutura**: `blocos` (headline, abertura, benefícios, autoridade, uso, risco)
-- **Metadata**: `atributos_normalizados`, `tags`, `seo`
-- **Qualidade**: `score_qualidade` (0-100), `auditoria`, `bk_context`
-
-### Score de Qualidade (0-100)
-- Dados obrigatórios: 25 pontos
-- Conteúdo premium: 25 pontos
-- Conformidade marca/legal: 20 pontos
-- SEO: 10 pontos
-- Imagens: 10 pontos
-- Consistência de atributos: 10 pontos
-
-## Fluxo de Desenvolvimento
-
-### Story-Driven Development (AIOS)
-
-1. **Trabalhe a partir de stories** em `docs/stories/`
-2. **Marque progresso** com checkboxes: `[ ]` → `[x]`
-3. **Atualize File List** na story ao modificar arquivos
-4. **Siga acceptance criteria** exatamente como especificado
-
-### Padrões de Código
-
-- **Python 3.8+** com type hints
-- Funções prefixadas com `_` são privadas/helpers
-- Normalização: use `_normalize_list()`, `_unique()`, `_title_case()`
-- Slugify: use `_slugify()` para URLs
-- Leitura de JSON: use `_load_json()` e `_write_json()`
-
-### Base de Conhecimento
-
-A base de conhecimento é organizada por domínios:
-- `base_conhecimento/{domain}/` - Um diretório por site
-- Arquivos `.md` com conteúdo normalizado
-- Metadata em frontmatter YAML (opcional)
-
-**Validação de BK**:
-```python
-from core.bk_reader import read_base_conhecimento, build_context
-
-bk_data = read_base_conhecimento("./base_conhecimento")
-bk_context = build_context(product, bk_data)
-```
-
-## Testes e Validação
-
-### Arquivos de Exemplo
-
-- `examples-input.json` - Exemplo de produto de entrada
-- `examples-output.json` - Saída esperada do pipeline
-- `examples-run-output.json` - Saída formatada para apresentação
-
-### Validação Manual
-
+### Trace Workflow Execution
 ```bash
-# Ver apenas scores e melhorias
-cat examples-run-output.json | jq '.scores'
-
-# Ver trechos de BK utilizados
-cat examples-run-output.json | jq '.trechos_BK_usados'
-
-# Ver texto final completo
-cat examples-run-output.json | jq -r '.texto_final'
+npm run trace -- workflow-name
 ```
-
-## Integração com AIOS
-
-Este projeto usa Synkra AIOS como meta-framework para orquestração de agentes.
-
-### Agent Activation (AIOS)
-
-- Agentes: `@dev`, `@qa`, `@architect`, `@pm`, `@po`, `@sm`, `@analyst`, `@devops`
-- Master: `@aios-master`
-- Comandos: `*help`, `*create-story`, `*task`, `*exit`
-
-### AIOS Framework Structure
-
-Ver `.aios-core/` para:
-- `development/agents/` - Personas de agentes
-- `development/tasks/` - Workflows executáveis
-- `product/templates/` - Templates de documentos
-
-### Common AIOS Commands
-
-```bash
-# Development
-npm run dev
-npm test
-npm run lint
-npm run build
-
-# AIOS Sync
-npm run sync:ide
-npm run validate:structure
-npm run validate:agents
-```
-
-## Variáveis de Ambiente
-
-Copie `.env.example` para `.env` e configure:
-
-```bash
-# LLM Providers (opcional para geração de conteúdo)
-OPENAI_API_KEY=
-ANTHROPIC_API_KEY=
-DEEPSEEK_API_KEY=
-
-# Para scraping avançado
-EXA_API_KEY=
-```
-
-## Regras de Negócio
-
-### Público-Alvo: Masculino 30+
-
-- Linguagem madura e objetiva, sem gírias juvenis
-- Valoriza qualidade, durabilidade e versatilidade
-- Destaque de acabamento, tecido e caimento
-
-### Matriz de Auditoria
-
-| Área | Severidade | Regra |
-|------|-----------|-------|
-| Dados obrigatórios | Alta | SKU, nome, categoria, preço, imagens presentes |
-| Padronização | Média | Tamanhos e cores seguem dicionário |
-| Conteúdo | Média | Título 55-70, subtítulo 90-130, descrição 600-900 chars |
-| Marca | Alta | Tom de voz e termos proibidos respeitados |
-| Legal | Alta | Sem claims proibidos |
-| SEO | Baixa | Meta title ≤60, meta description 140-160 |
-
-### Estrutura de Cadastro Premium
-
-1. **Headline** - Categoria + diferencial
-2. **Abertura** - Ocasião de uso e público
-3. **Benefícios** - Técnica traduzida em benefício
-4. **Autoridade** - Tecido, processo, qualidade
-5. **Uso Inteligente** - Combinações, ocasiões
-6. **Redução de Risco** - Medidas, cuidados, encolhimento
-
-## Troubleshooting
-
-### Pipeline falha com SKU duplicado
-```python
-# O pipeline mantém histórico de SKUs processados
-# Reset manual: remova do set seen_skus ou reinicie o processo
-```
-
-### Base de conhecimento vazia
-```bash
-# Verifique se há arquivos .md em base_conhecimento/
-ls -R base_conhecimento/
-
-# Rode a ingestão completa
-python pipeline/bk_ingest.py --sources docs/scraper-sources.txt --output base_conhecimento/
-```
-
-### Score baixo na auditoria
-```bash
-# Veja os motivos de reprovação
-cat output.json | jq '.auditoria.motivos_reprovacao'
-
-# Rode refinamento manual
-python pipeline/run.py --input produto.json --out output.json --max-iterations 5
-```
-
----
 
 ## Claude Code Specific Configuration
 
 ### Performance Optimization
-- Prefira chamadas em lote quando possível
-- Use execução paralela para operações independentes
-- Cache dados acessados frequentemente durante a sessão
+- Prefer batched tool calls when possible for better performance
+- Use parallel execution for independent operations
+- Cache frequently accessed data in memory during sessions
 
 ### Tool Usage Guidelines
-- Use `Grep` para busca, nunca `grep` ou `rg` via Bash
-- Use `Task` tool para operações multi-etapa
-- Leia/escreva arquivos em lote
-- Prefira editar arquivos existentes a criar novos
+- Always use the Grep tool for searching, never `grep` or `rg` in bash
+- Use the Task tool for complex multi-step operations
+- Batch file reads/writes when processing multiple files
+- Prefer editing existing files over creating new ones
 
 ### Session Management
-- Acompanhe progresso da story durante a sessão
-- Atualize checkboxes após completar tasks
-- Mantenha contexto da story atual
-- Salve estado antes de operações longas
+- Track story progress throughout the session
+- Update checkboxes immediately after completing tasks
+- Maintain context of the current story being worked on
+- Save important state before long-running operations
+
+### Error Recovery
+- Always provide recovery suggestions for failures
+- Include error context in messages to user
+- Suggest rollback procedures when appropriate
+- Document any manual fixes required
+
+### Testing Strategy
+- Run tests incrementally during development
+- Always verify lint and typecheck before marking complete
+- Test edge cases for each new feature
+- Document test scenarios in story files
+
+### Documentation
+- Update relevant docs when changing functionality
+- Include code examples in documentation
+- Keep README synchronized with actual behavior
+- Document breaking changes prominently
 
 ---
-
-*Cadastro de Produtos Premium v1.0 - Powered by Synkra AIOS*
+*Synkra AIOS Claude Code Configuration v2.0*

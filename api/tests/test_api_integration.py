@@ -71,15 +71,29 @@ def test_db_flow_products_and_generation_jobs(client_db, example_input):
     detail = detail_resp.json()
     assert detail["sku"] == payload["sku"]
 
-    patch_resp = client_db.patch(f"/api/v1/products/{product_id}", json={"status": "in_review"})
+    patch_resp = client_db.patch(
+        f"/api/v1/products/{product_id}",
+        json={"status": "in_review", "changed_by": "smoke-tester"},
+    )
     assert patch_resp.status_code == 200, patch_resp.text
     patched = patch_resp.json()
     assert patched["id"] == product_id
     assert patched["status"] == "in_review"
+    assert patched["status_updated_by"] == "smoke-tester"
+    assert patched["status_updated_at"] is not None
 
     detail_after_patch = client_db.get(f"/api/v1/products/{product_id}")
     assert detail_after_patch.status_code == 200, detail_after_patch.text
-    assert detail_after_patch.json()["status"] == "in_review"
+    detail_after_patch_body = detail_after_patch.json()
+    assert detail_after_patch_body["status"] == "in_review"
+    assert detail_after_patch_body["status_updated_by"] == "smoke-tester"
+    assert detail_after_patch_body["status_updated_at"] is not None
+
+    patch_not_found = client_db.patch(
+        f"/api/v1/products/{uuid4()}",
+        json={"status": "approved", "changed_by": "smoke-tester"},
+    )
+    assert patch_not_found.status_code == 404, patch_not_found.text
 
     job_payload = dict(example_input)
     job_payload["sku"] = f"{example_input['sku']}-JOB-{uuid4().hex[:8]}"

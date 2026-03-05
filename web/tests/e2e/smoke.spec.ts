@@ -144,7 +144,7 @@ test("produtos: presets de link aplicam filtros esperados", async ({ page }) => 
   await page.goto("/produtos");
 
   await page.getByRole("button", { name: "Link: Revisao editorial" }).click();
-  await expect(page).toHaveURL(/\/produtos\?(?=.*status=generated)(?=.*q=camisa)/);
+  await expect(page).toHaveURL(/\/produtos\?.*status=in_review/);
 
   await page.getByRole("button", { name: "Link: Aprovados" }).click();
   await expect(page).toHaveURL(/\/produtos\?.*status=approved/);
@@ -444,7 +444,123 @@ test("produtos: atualiza status editorial pelo detalhe", async ({ page }) => {
   await page.getByRole("button", { name: "Aprovar" }).click();
 
   await expect(page.getByText("Status atualizado: Aprovado.")).toBeVisible();
-  await expect(page.getByText("approved")).toBeVisible();
+  await expect(page.locator(".detail-summary-grid .badge.badge-ok").first()).toHaveText("Aprovado");
+});
+
+test("produtos: mostra erro quando PATCH retorna 404", async ({ page }) => {
+  await page.route("**/api/products?**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [
+          {
+            id: "prod-editorial-404",
+            sku: "CAM-EDITORIAL-404",
+            nome_produto: "Camisa Editorial 404",
+            marca: "Lumen",
+            status: "generated",
+            score_qualidade: 88,
+            created_at: "2026-02-27T10:00:00Z",
+          },
+        ],
+        pagination: { total: 1, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.route("**/api/products/prod-editorial-404", async (route) => {
+    if (route.request().method() === "PATCH") {
+      await route.fulfill({
+        status: 404,
+        contentType: "application/json",
+        body: JSON.stringify({
+          detail: "Produto nao encontrado.",
+        }),
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "prod-editorial-404",
+        sku: "CAM-EDITORIAL-404",
+        nome_produto: "Camisa Editorial 404",
+        marca: "Lumen",
+        status: "generated",
+        score_qualidade: 88,
+        input_payload: {},
+        output_payload: {},
+        created_at: "2026-02-27T10:00:00Z",
+        updated_at: "2026-02-27T10:00:01Z",
+      }),
+    });
+  });
+
+  await page.goto("/produtos");
+  await page.locator("button.table-inline-button").first().click();
+  await page.getByRole("button", { name: "Aprovar" }).click();
+  await expect(page.getByText("Falha ao atualizar status: Produto nao encontrado.")).toBeVisible();
+});
+
+test("produtos: mostra erro quando PATCH retorna 503", async ({ page }) => {
+  await page.route("**/api/products?**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        items: [
+          {
+            id: "prod-editorial-503",
+            sku: "CAM-EDITORIAL-503",
+            nome_produto: "Camisa Editorial 503",
+            marca: "Lumen",
+            status: "generated",
+            score_qualidade: 88,
+            created_at: "2026-02-27T10:00:00Z",
+          },
+        ],
+        pagination: { total: 1, limit: 10, offset: 0 },
+      }),
+    });
+  });
+
+  await page.route("**/api/products/prod-editorial-503", async (route) => {
+    if (route.request().method() === "PATCH") {
+      await route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({
+          detail: "Database nao configurado para atualizar produto.",
+        }),
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        id: "prod-editorial-503",
+        sku: "CAM-EDITORIAL-503",
+        nome_produto: "Camisa Editorial 503",
+        marca: "Lumen",
+        status: "generated",
+        score_qualidade: 88,
+        input_payload: {},
+        output_payload: {},
+        created_at: "2026-02-27T10:00:00Z",
+        updated_at: "2026-02-27T10:00:01Z",
+      }),
+    });
+  });
+
+  await page.goto("/produtos");
+  await page.locator("button.table-inline-button").first().click();
+  await page.getByRole("button", { name: "Aprovar" }).click();
+  await expect(
+    page.getByText("Falha ao atualizar status: Database nao configurado para atualizar produto."),
+  ).toBeVisible();
 });
 
 test("gerar: exibe erro de API quando criacao falha", async ({ page }) => {

@@ -1,7 +1,7 @@
 markdownExploder: true
 project:
-  type: greenfield
-  installedAt: '2026-02-23T19:25:33.287Z'
+  type: brownfield
+  installedAt: '2026-03-01T22:41:44.183Z'
   version: 2.1.0
 user_profile: bob
 ide:
@@ -88,6 +88,23 @@ projectStatus:
   statusFile: .aios/project-status.yaml
   maxModifiedFiles: 5
   maxRecentCommits: 2
+boundary:
+  frameworkProtection: true
+  protected:
+    - .aios-core/core/**
+    - .aios-core/development/tasks/**
+    - .aios-core/development/templates/**
+    - .aios-core/development/checklists/**
+    - .aios-core/development/workflows/**
+    - .aios-core/infrastructure/**
+    - .aios-core/constitution.md
+    - bin/aios.js
+    - bin/aios-init.js
+  exceptions:
+    - .aios-core/data/**
+    - .aios-core/development/agents/*/MEMORY.md
+    - .aios-core/core/config/schemas/**
+    - .aios-core/core/config/template-overrides.js
 agentIdentity:
   greeting:
     contextDetection: true
