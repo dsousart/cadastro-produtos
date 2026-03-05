@@ -444,6 +444,15 @@ export function ProductsListPanel({
   }, [focusSku, items, loadProductDetail, selectedProductId]);
 
   useEffect(() => {
+    if (!selectedProductId || !selectedProduct) return;
+    const matched = items.find((item) => item.id === selectedProductId);
+    if (!matched || matched.status === selectedProduct.status) return;
+    setSelectedProduct((prev) =>
+      prev && prev.id === matched.id ? { ...prev, status: matched.status } : prev,
+    );
+  }, [items, selectedProduct, selectedProductId]);
+
+  useEffect(() => {
     const timer = window.setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
     }, 250);
