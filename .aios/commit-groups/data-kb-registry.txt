@@ -1,0 +1,10 @@
+.aios-core/data/aios-kb.md
+.aios-core/data/capability-detection.js
+.aios-core/data/entity-registry.yaml
+.aios-core/data/mcp-discipline.js
+.aios-core/data/mcp-tool-examples.yaml
+.aios-core/data/tok2-validation.js
+.aios-core/data/tok3-token-comparison.js
+.aios-core/data/tool-registry.yaml
+.aios-core/data/tool-search-validation.js
+.aios-core/data/workflow-chains.yaml
